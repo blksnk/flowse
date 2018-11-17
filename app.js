@@ -95,6 +95,6 @@ const authRouter = require('./routes/auth-router.js');
 app.use('/', authRouter);
 
 const geneRouter = require('./routes/generator-router.js');
-app.use('/', authRouter)
+app.use('/', geneRouter)
 
 module.exports = app;

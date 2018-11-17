@@ -6,6 +6,7 @@ const userSchema = new Schema ({
 	email: {type: String, required: true, unique: true},
 	tokens: {
 		spotifyToken: {type: String},
+		spotifyRefresh: {type: String},
 		lastfmToken: {type: String},
 		souncloudToken: {type: String},
 
