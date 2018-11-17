@@ -1,0 +1,24 @@
+<h2>Log in</h2>
+
+{{>flash_messages}}
+
+<form action="/auth/default" method="POST">
+	<label>
+		Username:
+		<input type="email" name="userName" placeholder="Your username">
+	</label>
+
+	<label>
+		Email:
+		<input type="email" name="email" placeholder="Your email">
+	</label>
+
+	<label>
+		Password:
+		<input type="password" name="originalPassword" placeholder="It's a secret">
+	</label>
+
+	<button>Log In</button>
+</form>
+
+<a href="/auth/spotify">Login with spotify</a>

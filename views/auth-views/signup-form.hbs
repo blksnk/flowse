@@ -1,0 +1,25 @@
+<h2>Sign Up</h2>
+
+{{> flash_messages}}
+
+<form action="/process-signup" method="POST">
+	
+	<label>
+		Your full name:
+		<input type="text" name="userName" placeholder="username">
+	</label>
+
+	<label>
+		Email:
+		<input type="email" name="email" placeholder="email">
+	</label>
+
+	<label>
+		Password:
+		<input type="password" name="originalPassword" placeholder="It's a secret">
+	</label>
+
+	<button>Sign Up</button>
+</form>
+
+<a href="/auth/spotify">Sign up with spotify</a>
