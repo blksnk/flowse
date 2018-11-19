@@ -14,7 +14,9 @@ passport.use(new LastFmStrategy({
   'callbackURL': "http://localhost:5000/auth/lastfm/callback"
 }, function(req, sessionKey, done) {
   // Find/Update user's lastfm session
-  
+  User.create({  })
+  .then()
+  .catch();
 
   
   console.log("RESULT", sessionKey);
