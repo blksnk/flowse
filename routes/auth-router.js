@@ -93,9 +93,14 @@ router.get("/auth/spotify",
 router.get('/auth/spotify/callback/',
 	passport.authenticate('spotify', { failureRedirect: '/login' }),
 		(req, res) => {
-			
-			req.flash("success", "log in successful, please input your password")
-		    res.redirect("/account/modify");
+			if (!req.user.password) {
+				req.flash("success", "log in successful, please input your password")
+			    res.redirect("/account/modify");
+			}
+			else {
+				req.flash("success", "log in successfull");
+				res.redirect("/");
+			}
 	}
 );
 
