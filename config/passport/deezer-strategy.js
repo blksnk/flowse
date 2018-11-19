@@ -20,7 +20,7 @@ passport.use(new DeezerStrategy({
     			if(!userDoc.tokens.deezerToken) {
 
     				// add deezer token to existing account
-    				User.findByIdAndUpdate(userDoc._id, {$set: {tokens: {deezerToken: accessToken} } } )
+    				User.findByIdAndUpdate(userDoc._id, {$set: {tokens: {deezerToken: accessToken, deezerRefresh: refreshToken} } } )
 		    			.then(userDoc => {
 		    				console.log("DEEZER TOKEN ADDED");
 

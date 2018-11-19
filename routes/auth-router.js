@@ -94,8 +94,8 @@ router.get('/auth/spotify/callback/',
 	passport.authenticate('spotify', { failureRedirect: '/login' }),
 		(req, res) => {
 			
-			req.flash("success", "log in successful")
-		    res.redirect("/");
+			req.flash("success", "log in successful, please input your password")
+		    res.redirect("/account/modify");
 	}
 );
 
@@ -107,7 +107,7 @@ router.get('/auth/lastfm/callback', function(req, res, next){
   passport.authenticate('lastfm', {failureRedirect:'/login'}, function(err, user, sesh){
 		
     res.redirect('/');
-  })(req, {} );
+  })
 });
 
 
@@ -142,7 +142,7 @@ router.get("/logout", (req, res, next) => {
 router.get('/account', (req, res, next) => {
 	if(!req.user) {
 		req.flash("error", "Please login to manage your account.")
-		req.redirect('/login');
+		res.redirect('/login');
 		return;
 	}
 	res.render('auth-views/account-overview.hbs');
@@ -152,7 +152,7 @@ router.get('/account', (req, res, next) => {
 router.get('/account/modify', (req, res, next) => {
 	if(!req.user) {
 		req.flash("error", "Please login to manage your account.")
-		req.redirect('/login');
+		res.redirect('/login');
 		return;
 	}
 	res.render('auth-views/account-modify.hbs');
@@ -168,7 +168,7 @@ router.post('/account/modify/process-changes', (req, res, next) => {
 
 	if(!req.user) {
 		req.flash("error", "Please login to manage your account.")
-		req.redirect('/login');
+		res.redirect('/login');
 		return;
 	}
 	console.log("user: ", req.user);
@@ -217,6 +217,8 @@ router.post('/account/modify/process-changes', (req, res, next) => {
 		})
 
 })
+
+//######################### SERVICE MANAGEMENT ############################
 
 router.post('/account/services/process-changes', (req, res, next) => {
 	

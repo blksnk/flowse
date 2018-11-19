@@ -108,6 +108,9 @@ router.get("/generate", (req, res, next) => {
 							res.render('generator-views/result.hbs');
 						}
 					)}
+					else {
+						res.render('generator-views/result.hbs');
+					}
 
 				})
 				.catch(err => next(err));
