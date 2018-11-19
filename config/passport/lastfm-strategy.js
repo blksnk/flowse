@@ -21,45 +21,19 @@ passport.use(new LastFmStrategy({
   'secret': "98d54dde5b992abcad818aeb8f89c4ab",
   'callbackURL': "http://localhost:5000/auth/lastfm/callback"
 }, function(req, sessionKey, done) {
-  // Find/Update user's lastfm session
-    console.log("RESULT", sessionKey);
 
-    lfm.user.getInfo(sessionKey.key, function (err, info) {
-      console.log("INFO: ", info)
-      done(null, info);
-    })
+  // Get the user info
+  lfm.user.getInfo(sessionKey.api_key, function (err, info) {
+  console.log("INFO: ", info)
+  done(null, info);
+  })
 
-  
+  // Create the user in the database
+  User.create({  })
+  .then(
+    req.login()
+  )
+  .catch();
 
-
-
-  
 }));
-  // If user logged in
-  // if (req.user){
-  //   User.findById(req.user.id, (err, user) => {
-  //     if (err) return done(err);
 
-  //     var creds = _.find(req.user.tokens, {type:'lastfm'});
-  //     // if creds already present
-  //     if (user.lastfm && creds){
-  //       req.flash('info', {msg:'Account already linked'});
-
-  //       return done(err, user, {msg:'Account already linked'})
-  //     }
-
-  //     else{
-  //       user.tokens.push({type:'lastfm', username:sessionKey.username, key:sessionKey.key });
-  //       user.lastfm = sessionKey.key;
-
-  //       user.save(function(err){
-  //         if (err) return done(err);
-  //         req.flash('success', {msg:"Last.fm authentication success"});
-  //         return done(err, user, sessionKey);
-  //       });
-  //     }
-  //   });
-  // }
-  // else{
-  //   return done(null, false, {message:'Must be logged in'});
-  // }
