@@ -17,6 +17,7 @@ const passport     = require('passport');
 // run the code inside "passport-setup.js"
 require('./config/passport/passport-setup.js');
 require('./config/passport/spotify-strategy.js');
+require('./config/passport/lastfm-strategy.js');
 
 mongoose
   .connect('mongodb://localhost/flowse', {useNewUrlParser: true})

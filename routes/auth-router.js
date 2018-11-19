@@ -92,8 +92,15 @@ router.get('/auth/spotify/callback/',
 	}
 );
 
+router.get('/auth/lastfm', passport.authenticate('lastfm'));
 
 
+router.get('/auth/lastfm/callback', function(req, res, next){
+  passport.authenticate('lastfm', {failureRedirect:'/login'}, function(err, user, sesh){
+		
+    res.redirect('/');
+  })(req, {} );
+});
 
 
 router.get("/logout", (req, res, next) => {
