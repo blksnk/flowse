@@ -1,5 +1,12 @@
-<h3>{{this.name}}</h3>
+<div class="title">
+	<h3>{{this.name}}</h3>
+</div>
+<div class="artist">
+	<p>by {{this.artists.0.name}}</p>
+</div>
 
-<p>by {{this.artists.0.name}}</p>
-
-<a href="{{this.external_urls.spotify}}">Listen on spotify</a>
+<div class="link">	
+	<div class="connect sp">
+		<a class="inner" href="{{this.external_urls.spotify}}">Listen on spotify</a>
+	</div>
+</div>

@@ -50,49 +50,53 @@ h2 {
   margin: 0px 0 20px 0;
   padding-left: 10%; }
 
-.form-card {
+.card {
   display: flex;
   justify-content: center;
+  margin-bottom: 30px;
   padding: 10px;
   color: white;
   background-color: #383838;
   font-size: 15px;
   border-radius: 8px;
-  width: 500px; }
-  .form-card form {
+  width: 500px;
+  box-shadow: 5px 10px 30px #2A2727; }
+  .card form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     width: 480px; }
-    .form-card form label {
+    .card form label {
       margin-top: 20px;
       font-family: 'Euclid';
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 80%; }
-      .form-card form label input {
+      .card form label input {
         display: inline-block;
         width: 70%;
         height: 20px;
         padding: 10px;
         border: none;
-        border-radius: 30px; }
-    .form-card form .button-right {
+        border-radius: 30px;
+        background-color: #2E2E2E;
+        color: white; }
+    .card form .button-right {
       display: flex;
       justify-content: flex-end;
-      padding-left: 350px;
+      margin-left: 430px;
       margin-top: 50px; }
-      .form-card form .button-right .button-anim {
+      .card form .button-right .button-anim {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
-        width: 105px;
-        transition-duration: 0.5s;
+        width: 200Px;
+        transition-duration: 0.5s ease-in-out;
         height: 30px; }
-        .form-card form .button-right .button-anim button {
+        .card form .button-right .button-anim button {
           font-family: 'Euclid-Light';
           border: none;
           background: none;
@@ -100,35 +104,38 @@ h2 {
           font-size: 20px;
           text-align: right; }
 
-.button-anim:hover {
-  width: 130px; }
+.button-anim:hover button {
+  padding-right: 10px; }
 
 .connect-with {
   margin-top: 40px;
   display: flex;
   justify-content: space-evenly;
   width: 400px; }
-  .connect-with .connect {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation-fill-mode: backwards;
-    transition-duration: 0.3s; }
-    .connect-with .connect a {
-      color: transparent;
-      text-decoration: none;
-      animation-fill-mode: both;
-      transition-delay: 0;
-      transition-duration: 0.1s; }
-  .connect-with .sp {
-    background-color: #1DB954; }
-  .connect-with .lf {
-    background-color: #BA0000; }
-  .connect-with .dz {
-    background-color: #2692B7; }
+
+.sp {
+  background-color: #1DB954; }
+
+.lf {
+  background-color: #BA0000; }
+
+.dz {
+  background-color: #2692B7; }
+
+.connect {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 0.3s;
+  box-shadow: 10px 15px 30px #2E2E2E; }
+  .connect a {
+    color: transparent;
+    text-decoration: none;
+    transition-delay: 0;
+    transition-duration: 0.1s; }
 
 .connect:hover {
   width: 180px; }
@@ -136,6 +143,40 @@ h2 {
 .connect:hover .inner {
   color: white;
   transition-delay: 0.2s;
-  transition-duration: 0.5s; }
+  transition-duration: 0.3s; }
+
+.results .card {
+  flex-direction: column;
+  width: 800px; }
+  .results .card h2 {
+    padding-left: 40px;
+    font-size: 40px; }
+  .results .card .one-track {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center; }
+    .results .card .one-track p, .results .card .one-track h3 {
+      font-family: 'Sofia-Pro-Light'; }
+    .results .card .one-track .title {
+      width: 40%; }
+    .results .card .one-track .artist {
+      width: 30%; }
+    .results .card .one-track .link {
+      width: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+    .results .card .one-track .sp {
+      background-color: #8EF3B1; }
+    .results .card .one-track .lf {
+      background-color: #D68F8F; }
+    .results .card .one-track .dz {
+      background-color: #81C8DF; }
+    .results .card .one-track .sp:hover {
+      background-color: #1DB954; }
+    .results .card .one-track .lf:hover {
+      background-color: #BA0000; }
+    .results .card .one-track .dz:hover {
+      background-color: #2692B7; }
 
 /*# sourceMappingURL=style.css.map */
