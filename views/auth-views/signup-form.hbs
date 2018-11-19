@@ -1,11 +1,16 @@
 <h2>Sign Up</h2>
 
+<div class="flex-center">
+	
+
+<div class="form-card">
+	
 {{> flash_messages}}
 
 <form action="/process-signup" method="POST">
 	
 	<label>
-		Your full name:
+		Full name:
 		<input type="text" name="userName" placeholder="username">
 	</label>
 
@@ -18,10 +23,28 @@
 		Password:
 		<input type="password" name="originalPassword" placeholder="It's a secret">
 	</label>
-
-	<button>Sign Up</button>
+	
+	<div class="button-right">
+		<div class="button-anim">
+			<button>Sign Up</button>
+			<i class="fas fa-long-arrow-alt-right"></i>
+		</div>
+	</div>
 </form>
+</div>
 
-<a href="/auth/spotify">Sign up with spotify</a>
+<div class="connect-with">
+	<div class="connect sp">
+		<a class="inner" href="/auth/spotify">Sign up with Spotify</a>
+	</div>
 
-<a href="/auth/deezer">Sign up with deezer</a>
+	<div class="connect lf">
+		<a class="inner" href="/auth/lastfm">Sign up with Last.fm</a>
+	</div>
+
+	<div class="connect dz">
+		<a class="inner" href="/auth/deezer">Sign up with Deezer</a>
+	</div>
+</div>
+
+</div>

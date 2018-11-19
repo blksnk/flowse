@@ -1,27 +1,42 @@
-<h2>Log in</h2>
+<h2>Log in.</h2>
 
-{{>flash_messages}}
+<div class="flex-center">
+	
 
+<div class="form-card">
+	
+	{{>flash_messages}}
 <form action="/auth/default" method="POST">
-	<label>
-		Username:
-		<input type="text" name="userName" placeholder="Your username">
-	</label>
+
 
 	<label>
-		Email:
+		<p>Email</p>
 		<input type="email" name="email" placeholder="Your email">
 	</label>
 
 	<label>
-		Password:
+		<p>Password</p>
 		<input type="password" name="originalPassword" placeholder="It's a secret">
 	</label>
 
-	<button>Log In</button>
+	<div class="button-right">
+		<button>Log in <i class="fas fa-long-arrow-alt-right"></i></button>
+	</div>
 </form>
+</div>
 
-<a href="/auth/spotify">Login with spotify</a>
-<a href="/auth/lastfm">Login with LastFM</a>
+<div class="connect-with">
+	<div class="connect sp">
+		<a class="hidden" href="/auth/spotify">Log in with Spotify</a>
+	</div>
 
-<a href="/auth/deezer">Login with deezer</a>
+	<div class="connect lf">
+		<a class="hidden" href="/auth/lastfm">Log in with Last.fm</a>
+	</div>
+
+	<div class="connect dz">
+		<a class="hidden" href="/auth/deezer">Log in with Deezer</a>
+	</div>
+</div>
+
+</div>

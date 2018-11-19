@@ -1,8 +1,141 @@
+@font-face {
+  font-family: Euclid;
+  src: url("/fonts/Euclid.woff"); }
+
+@font-face {
+  font-family: NewParis;
+  src: url("/fonts/NewParis.woff2"); }
+
+@font-face {
+  font-family: Euclid-Light;
+  src: url("/fonts/Euclid-Light.woff"); }
+
+@font-face {
+  font-family: Sofia-Pro-Light;
+  src: url("/fonts/sofiapro-light.otf"); }
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
+  padding: 0;
+  margin: 0;
+  font-family: 'Euclid-Light';
+  background-color: #2F2F2F; }
 
 a {
   color: #00B7FF; }
+
+h1, h2, h3 {
+  font-family: 'Euclid';
+  color: white; }
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  flex-direction: column; }
+
+nav {
+  background-color: #353535;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px; }
+  nav .logo {
+    font-family: 'Sofia-Pro-Light';
+    font-size: 40px; }
+  nav a {
+    text-decoration: none;
+    color: white; }
+
+h2 {
+  font-size: 120px;
+  margin: 0px 0 20px 0;
+  padding-left: 10%; }
+
+.form-card {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  color: white;
+  background-color: #383838;
+  font-size: 15px;
+  border-radius: 8px;
+  width: 500px; }
+  .form-card form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 480px; }
+    .form-card form label {
+      margin-top: 20px;
+      font-family: 'Euclid';
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 80%; }
+      .form-card form label input {
+        display: inline-block;
+        width: 70%;
+        height: 20px;
+        padding: 10px;
+        border: none;
+        border-radius: 30px; }
+    .form-card form .button-right {
+      display: flex;
+      justify-content: flex-end;
+      padding-left: 350px;
+      margin-top: 50px; }
+      .form-card form .button-right .button-anim {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 105px;
+        transition-duration: 0.5s;
+        height: 30px; }
+        .form-card form .button-right .button-anim button {
+          font-family: 'Euclid-Light';
+          border: none;
+          background: none;
+          color: white;
+          font-size: 20px;
+          text-align: right; }
+
+.button-anim:hover {
+  width: 130px; }
+
+.connect-with {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-evenly;
+  width: 400px; }
+  .connect-with .connect {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation-fill-mode: backwards;
+    transition-duration: 0.3s; }
+    .connect-with .connect a {
+      color: transparent;
+      text-decoration: none;
+      animation-fill-mode: both;
+      transition-delay: 0;
+      transition-duration: 0.1s; }
+  .connect-with .sp {
+    background-color: #1DB954; }
+  .connect-with .lf {
+    background-color: #BA0000; }
+  .connect-with .dz {
+    background-color: #2692B7; }
+
+.connect:hover {
+  width: 180px; }
+
+.connect:hover .inner {
+  color: white;
+  transition-delay: 0.2s;
+  transition-duration: 0.5s; }
 
 /*# sourceMappingURL=style.css.map */
