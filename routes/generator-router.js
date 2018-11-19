@@ -5,15 +5,15 @@ const router = express.Router();
 const spotifyAPI = require('spotify-web-api-node');
 
 const spotify = new spotifyAPI({
-	clientID: "2a2016384e4643778797698a67984cfe",
-    clientSecret: "c0ba306d26a547988d402a3d04a8b21c",
+	clientID: process.env.SPOTIFY_KEY,
+    clientSecret: process.env.SPOTIFY_SECRET,
     redirectURL: "http://localhost:5000/generate/result",
 });
 
 const deezerAPI = require('node-deezer');
 const deezer = new deezerAPI({
-	clientID: "312144",
-    clientSecret: "e03b0cb702bb560aa3a4d42651253b68",
+	clientID: process.env.DEEZER_KEY,
+    clientSecret: process.env.DEEZER_SECRET,
     redirectURL: "http://localhost:5000/generate/result",
 });
 
@@ -108,6 +108,9 @@ router.get("/generate", (req, res, next) => {
 							res.render('generator-views/result.hbs');
 						}
 					)}
+					else {
+						res.render('generator-views/result.hbs');
+					}
 
 				})
 				.catch(err => next(err));

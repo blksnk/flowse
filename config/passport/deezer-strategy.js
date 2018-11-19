@@ -5,8 +5,8 @@ const DeezerStrategy = require('passport-deezer').Strategy;
 const User = require('../../models/user-model.js');
 
 passport.use(new DeezerStrategy({
-    clientID: "312144",
-    clientSecret: "e03b0cb702bb560aa3a4d42651253b68",
+    clientID: process.env.DEEZER_KEY,
+    clientSecret: process.env.DEEZER_SECRET,
     callbackURL: "http://localhost:5000/auth/deezer/callback"
   },
   function(accessToken, refreshToken, profile, done) {
@@ -20,7 +20,7 @@ passport.use(new DeezerStrategy({
     			if(!userDoc.tokens.deezerToken) {
 
     				// add deezer token to existing account
-    				User.findByIdAndUpdate(userDoc._id, {$set: {tokens: {deezerToken: accessToken} } } )
+    				User.findByIdAndUpdate(userDoc._id, {$set: {tokens: {deezerToken: accessToken, deezerRefresh: refreshToken} } } )
 		    			.then(userDoc => {
 		    				console.log("DEEZER TOKEN ADDED");
 

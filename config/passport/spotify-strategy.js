@@ -5,8 +5,8 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 //refresh access token
 const spotifyAPI = require('spotify-web-api-node');
 const spotify = new spotifyAPI({
-  clientID: "2a2016384e4643778797698a67984cfe",
-    clientSecret: "c0ba306d26a547988d402a3d04a8b21c",
+  clientID: process.env.SPOTIFY_KEY,
+    clientSecret: process.env.SPOTIFY_SECRET,
     
 });
 
@@ -16,8 +16,8 @@ const User = require('../../models/user-model.js')
 passport.use(
   new SpotifyStrategy(
     {
-      clientID: "2a2016384e4643778797698a67984cfe",
-      clientSecret: "c0ba306d26a547988d402a3d04a8b21c",
+      clientID: process.env.SPOTIFY_KEY,
+      clientSecret: process.env.SPOTIFY_SECRET,
       callbackURL: 'http://localhost:5000/auth/spotify/callback'
     },
     function(accessToken, refreshToken, expires_in, profile, done) {

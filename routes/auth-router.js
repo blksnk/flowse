@@ -4,6 +4,10 @@ const passport = require('passport');
 
 const router = express.Router();
 
+const User = require('../models/user-model.js');
+
+const bcrypt = require('bcrypt');
+
 router.get("/signup", (req, res, next) => {
 	res.render("auth-views/signup-form.hbs");
 });
@@ -20,9 +24,9 @@ router.post("/process-signup", (req, res, next) => {
 	}
 
 	// encrypt the sumbitted password before saving
-	const encryptedPassword = bcrypt.hashSync(originalPassword, 10);
+	const password = bcrypt.hashSync(originalPassword, 10);
 
-	User.create( { fullName, email, encryptedPassword } )
+	User.create( { fullName, email, password } )
 		.then(userDoc => {
 			req.flash("success", "account successfully created");
 			res.redirect("/")
@@ -44,9 +48,9 @@ router.post("/auth/default", (req, res, next) => {
 				return; // use return instead of a big else;
 			}
 			// check the password
-			const { encryptedPassword } = userDoc;
+			const { password } = userDoc;
 			// "compareSync" will return false if originalPassword is WRONG
-			if (!bcrypt.compareSync(originalPassword, encryptedPassword)) {
+			if (!bcrypt.compareSync(originalPassword, password)) {
 				//redirect to login page if pwd is FALSE
 
 				// "req.flash()" is defined by "connect-flash"
@@ -89,9 +93,14 @@ router.get("/auth/spotify",
 router.get('/auth/spotify/callback/',
 	passport.authenticate('spotify', { failureRedirect: '/login' }),
 		(req, res) => {
-			
-			req.flash("success", "log in successful")
-		    res.redirect("/");
+			if (!req.user.password) {
+				req.flash("success", "log in successful, please input your password")
+			    res.redirect("/account/modify");
+			}
+			else {
+				req.flash("success", "log in successfull");
+				res.redirect("/");
+			}
 	}
 );
 
@@ -103,7 +112,7 @@ router.get('/auth/lastfm/callback', function(req, res, next){
   passport.authenticate('lastfm', {failureRedirect:'/login'}, function(err, user, sesh){
 		
     res.redirect('/');
-  })(req, {} );
+  })
 });
 
 
@@ -130,5 +139,96 @@ router.get("/logout", (req, res, next) => {
 	req.flash("success", "Logged out successfully");
 	res.redirect("/");
 })
+
+
+
+//########################## ACCOUNT MANAGEMENT ###########################
+
+router.get('/account', (req, res, next) => {
+	if(!req.user) {
+		req.flash("error", "Please login to manage your account.")
+		res.redirect('/login');
+		return;
+	}
+	res.render('auth-views/account-overview.hbs');
+})
+
+
+router.get('/account/modify', (req, res, next) => {
+	if(!req.user) {
+		req.flash("error", "Please login to manage your account.")
+		res.redirect('/login');
+		return;
+	}
+	res.render('auth-views/account-modify.hbs');
+})
+
+router.get('/account/services', (req, res, next) => {
+	res.render('auth-views/account-services.hbs');
+})
+
+router.post('/account/modify/process-changes', (req, res, next) => {
+	const {userName, email, originalPassword, newPassword } = req.body;
+	const userEmail = req.user.email;
+
+	if(!req.user) {
+		req.flash("error", "Please login to manage your account.")
+		res.redirect('/login');
+		return;
+	}
+	console.log("user: ", req.user);
+	//find user in DB
+	User.findOne({email: userEmail  } )
+		.then(userDoc => {
+
+
+			// if user has no password, skip passwodr verif process
+			if(!req.user.password) {
+				//encrypt new password
+				const newPwd = bcrypt.hashSync(newPassword, 10);
+
+				User.findByIdAndUpdate(userDoc._id, {$set: {userName: userName, email: email, password: newPwd} } )
+					.then(userDoc => {
+						req.flash("success", "account info successfully updated!");
+						res.redirect('/account');
+					})
+					.catch(err => next(err));
+				return;
+			}
+
+			//check if original password is false
+			if(!bcrypt.compareSync(originalPassword, userDoc.password)) {
+				req.flash('error', 'Incorrect password');
+				res.redirect('/account');
+				return;
+			}
+			//if password ok
+			else {
+				//encrypt new password
+				const newPwd = bcrypt.hashSync(newPassword, 10);
+
+				User.findByIdAndUpdate(userDoc._id, {$set: {userName: userName, email: email, password: newPwd} } )
+					.then(userDoc => {
+						req.flash("success", "account info successfully updated!");
+						res.redirect('/account');
+					})
+					.catch(err => next(err));
+			}
+		})
+		.catch(err => {
+			req.flash('error', "Internal error. Are you logged in ?")
+			console.log(err);
+			res.redirect('/');
+		})
+
+})
+
+//######################### SERVICE MANAGEMENT ############################
+
+router.post('/account/services/process-changes', (req, res, next) => {
+	
+})
+
+
 
 module.exports = router;
