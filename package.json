@@ -22,7 +22,11 @@
     "node-sass-middleware": "^0.11.0",
     "node-soundcloud": "0.0.6",
     "passport": "^0.4.0",
+<<<<<<< HEAD
     "passport-lastfm": "^1.0.1",
+=======
+    "passport-deezer": "^0.2.0",
+>>>>>>> 6883ed3198ec89fb2f60677af2cc7598b0589dfa
     "passport-spotify": "^1.0.1",
     "serve-favicon": "^2.5.0",
     "spotify-web-api-node": "^4.0.0"

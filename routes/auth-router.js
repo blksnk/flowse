@@ -73,6 +73,9 @@ router.get("/login", (req, res, next) => {
 	res.render('auth-views/login-form.hbs');
 })
 
+
+//################################ SPOTIFY ################################
+
 router.get("/auth/spotify", 
 	passport.authenticate("spotify", {
 		scope: ['user-read-email', 'user-read-private', 'user-follow-read', 'user-top-read', 'user-library-read']
@@ -92,8 +95,9 @@ router.get('/auth/spotify/callback/',
 	}
 );
 
-router.get('/auth/lastfm', passport.authenticate('lastfm'));
 
+////LASTFM
+router.get('/auth/lastfm', passport.authenticate('lastfm'));
 
 router.get('/auth/lastfm/callback', function(req, res, next){
   passport.authenticate('lastfm', {failureRedirect:'/login'}, function(err, user, sesh){
@@ -101,6 +105,22 @@ router.get('/auth/lastfm/callback', function(req, res, next){
     res.redirect('/');
   })(req, {} );
 });
+
+
+//################################ DEEZER ################################
+
+router.get('/auth/deezer', 
+	passport.authenticate("deezer", {
+		scope: ['basic_access', 'email', 'manage_library']
+	}));
+
+
+router.get('/auth/deezer/callback', 
+	passport.authenticate('deezer', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 
 router.get("/logout", (req, res, next) => {

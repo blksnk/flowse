@@ -2,6 +2,7 @@ const passport = require('passport');
 
 const SpotifyStrategy = require('passport-spotify').Strategy;
 
+//refresh access token
 const spotifyAPI = require('spotify-web-api-node');
 const spotify = new spotifyAPI({
   clientID: "2a2016384e4643778797698a67984cfe",
@@ -10,7 +11,8 @@ const spotify = new spotifyAPI({
 });
 
 const User = require('../../models/user-model.js')
- 
+
+//login and signup
 passport.use(
   new SpotifyStrategy(
     {
@@ -37,7 +39,7 @@ passport.use(
                     })
                     .catch(err => next(err));
                 })
-                .catch(err => next(err))
+                .catch(err => next(err));
 
               console.log("user login")
               return done(null, userDoc);
