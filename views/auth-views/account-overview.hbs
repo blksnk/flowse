@@ -1,0 +1,39 @@
+{{>flash_messages}}
+
+<h2>Overview</h2>
+
+<h4>User Name: {{currentUser.userName}}</h4>
+
+<h4>Email: {{currentUser.email}}</h4>
+
+<h4>Connected Services:</h4>
+
+<ul>
+	{{#if currentUser.tokens.spotifyToken}}
+	<li>
+		<h4>Spotify</h4>
+	</li>
+	{{/if}}
+
+	{{#if currentUser.tokens.soundcloudToken}}
+	<li>
+		<h4>SoundCloud</h4>
+	</li>
+	{{/if}}
+
+	{{#if currentUser.tokens.deezerToken}}
+	<li>
+		<h4>Deezer</h4>
+	</li>
+	{{/if}}
+
+	{{#if currentUser.tokens.lastfmToken}}
+	<li>
+		<h4>Last.fm</h4>
+	</li>
+	{{/if}}
+</ul>
+
+<a href="/account/modify">Modify your personnal information</a>
+
+<a href="/account/serives">Add/Remove services</a>

@@ -1,0 +1,27 @@
+<h2>Modify your personal details</h2>
+
+<form action="/account/modify/process-changes" method="POST">
+	<label>
+		Username: 
+		<input type="text" name="userName" value="{{currentUser.userName}}">
+	</label>
+	
+	<label>
+		Email: 
+		<input type="email" name="email" value="{{currentUser.email}}">
+	</label>
+
+	<label>
+		Current password: 
+		<input type="password" name="orginalPassword">
+	</label>
+
+	<label>
+		New password: 
+		<input type="password" name="newPassword">
+	</label>
+
+	<button>Save changes</button>
+</form>
+
+<a href="/account">Cancel</a>
