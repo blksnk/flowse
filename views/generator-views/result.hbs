@@ -1,12 +1,28 @@
-{{#each spotifyResults}}
-<div>
-	
-{{>spotifyTrack}}
+<h2>Here are your results</h2>
 
-{{this.name}}
+{{#if spotifyResults}}
+
+<h2>Spotify:</h2>
+<div class="spotify-list">	
+	{{#each spotifyResults}}
+
+		<div class="one-track">	
+			{{>spotify_track}}
+		</div>
+
+	{{/each}}
+
 </div>
+{{/if}}
 
-{{/each}}
+{{#if deezerResults}}
 
-
-<h4>test</h4>
+<h2>Deezer</h2>
+<div class="deezer-list">
+	{{#each deezerResults}}
+		<div class="one-track">
+			{{>deezer_track}}
+		</div>
+	{{/each}}
+</div>
+{{/if}}
