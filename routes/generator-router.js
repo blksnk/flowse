@@ -3,9 +3,17 @@ const express = require('express');
 const router = express.Router();
 
 const spotifyAPI = require('spotify-web-api-node');
+
 const spotify = new spotifyAPI({
 	clientID: "2a2016384e4643778797698a67984cfe",
     clientSecret: "c0ba306d26a547988d402a3d04a8b21c",
+    redirectURL: "http://localhost:5000/generate/result",
+});
+
+const deezerAPI = require('node-deezer');
+const deezer = new deezerAPI({
+	clientID: "312144",
+    clientSecret: "e03b0cb702bb560aa3a4d42651253b68",
     redirectURL: "http://localhost:5000/generate/result",
 });
 
@@ -26,6 +34,10 @@ function sortByFrequency(array) {
 router.get("/generate", (req, res, next) => {
 	const {spotifyToken, lastfmToken, soundcloudToken, deezerToken} = req.user.tokens;
 
+	let topGenres = [];
+	let artistNames = [];
+
+	//####################################### DEEZER ###########################
 	if(spotifyToken) {
 		spotify.setAccessToken(spotifyToken);
 
@@ -35,8 +47,7 @@ router.get("/generate", (req, res, next) => {
 			const topArtists = artistDoc.body.items;
 
 			// get genres of top artists
-			let topGenres = [];
-			let artistNames = [];
+			
 
 			//Loop over each artist and push genres to array
 			topArtists.forEach( (oneArtist) => {
@@ -54,29 +65,46 @@ router.get("/generate", (req, res, next) => {
 
 
 			// get recommandation
-			const first5 = sortedGenres.slice(0, 4);
+			const first5 = sortedGenres.slice(0, 1);
 
-			const genreList = first5.reduce( (sum, genre) => {
+			genreList = first5.reduce( (sum, genre) => {
 				return sum + " " + genre;
 			})
 
+			
+
 			console.log(genreList);
+
+			spotify.searchTracks(genreList, {limit: 5})
+				.then(result => {
+
+					res.locals.spotifyResults = result.body.tracks.items;
+					// res.send(result);
+					res.render('generator-views/result.hbs');
+				})
+				.catch(err => next(err))
 
 			
 		})
 		.catch(err => next(err));
 	}
 
-	if (lastfmToken)
+	//####################################### DEEZER ###########################
+	// if (deezerToken) {
+	// 	console.log(deezerToken);
+	// 	deezer.request(deezerToken, {
+	// 		resource: 'user/recommandations/tracks',
+	// 		method: 'GET',
+	// 	}, (result) => {
+	// 		console.log(result);
+	// 		res.send(result);
+	// 	}
+	// )};
 
 
-	// generate results
+	//generate results
 
-	spotify.searchTracks(genreList, {limit: 5})
-		.then(result => {
-			res.send(result);
-		})
-		.catch(err => next(err))
+	
 
 })
 

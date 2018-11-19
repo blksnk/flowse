@@ -111,7 +111,7 @@ router.get('/auth/lastfm/callback', function(req, res, next){
 
 router.get('/auth/deezer', 
 	passport.authenticate("deezer", {
-		scope: ['basic_access', 'email', 'manage_library']
+		scope: ['basic_access', 'email', 'manage_library', 'offline_access']
 	}));
 
 
