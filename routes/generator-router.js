@@ -32,22 +32,26 @@ function sortByFrequency(array) {
 }
 
 router.get("/generate", (req, res, next) => {
-	const {spotifyToken, lastfmToken, soundcloudToken, deezerToken} = req.user.tokens;
+	const {spotifyToken, spotifyRefresh, lastfmToken, soundcloudToken, deezerToken} = req.user.tokens;
 
 	let topGenres = [];
 	let artistNames = [];
+	let genreList;
+	let artistList; 	
 
-	//####################################### DEEZER ###########################
+	
 	if(spotifyToken) {
 		spotify.setAccessToken(spotifyToken);
+		spotify.setRefreshToken(spotifyRefresh);
+		spotify.refreshAccessToken()
+			.then(token => {
+				spotify.setAccessToken(token);	
+			})
 
 	// get top genres
 	spotify.getMyTopArtists({limit: 20})
 		.then(artistDoc => {
 			const topArtists = artistDoc.body.items;
-
-			// get genres of top artists
-			
 
 			//Loop over each artist and push genres to array
 			topArtists.forEach( (oneArtist) => {
@@ -65,9 +69,9 @@ router.get("/generate", (req, res, next) => {
 
 
 			// get recommandation
-			const first5 = sortedGenres.slice(0, 1);
+			const selected = sortedGenres.slice(0, 1);
 
-			genreList = first5.reduce( (sum, genre) => {
+			genreList = selected.reduce( (sum, genre) => {
 				return sum + " " + genre;
 			})
 
@@ -75,36 +79,48 @@ router.get("/generate", (req, res, next) => {
 
 			console.log(genreList);
 
+			//####################################### SPOTIFY ###########################
 			spotify.searchTracks(genreList, {limit: 5})
 				.then(result => {
 
 					res.locals.spotifyResults = result.body.tracks.items;
+					// res.render('generator-views/result.hbs');
 					// res.send(result);
-					res.render('generator-views/result.hbs');
-				})
-				.catch(err => next(err))
+					
+					//####################################### DEEZER ###########################
+					if (deezerToken) {
+						console.log(deezerToken);
+						deezer.request(deezerToken, {
+							resource: 'search/track',
+							method: 'GET',
+							fields: {
+								q: genreList, 
+								limit: 5
+							},
 
+						},
+						function done (err, result) {
+							if(err) next(err);
+
+							console.log(result);
+							res.locals.deezerResults = result.data;
+							// res.send(result);
+							res.render('generator-views/result.hbs');
+						}
+					)}
+
+				})
+				.catch(err => next(err));
 			
 		})
 		.catch(err => next(err));
 	}
 
-	//####################################### DEEZER ###########################
-	// if (deezerToken) {
-	// 	console.log(deezerToken);
-	// 	deezer.request(deezerToken, {
-	// 		resource: 'user/recommandations/tracks',
-	// 		method: 'GET',
-	// 	}, (result) => {
-	// 		console.log(result);
-	// 		res.send(result);
-	// 	}
-	// )};
+	
 
 
 	//generate results
 
-	
 
 })
 
@@ -114,4 +130,4 @@ router.get("/generate", (req, res, next) => {
 
 
 
-module.exports = router;
+module.exports = router;	
