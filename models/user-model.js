@@ -9,7 +9,8 @@ const userSchema = new Schema ({
 		spotifyRefresh: {type: String},
 		lastfmToken: {type: String},
 		souncloudToken: {type: String},
-
+		deezerToken: {type: String},
+		deezerRefresh: {type: String},
 	},
 	password: {type: String},
 }, {

@@ -18,6 +18,8 @@ const passport     = require('passport');
 require('./config/passport/passport-setup.js');
 require('./config/passport/spotify-strategy.js');
 
+require('./config/passport/deezer-strategy.js')
+
 mongoose
   .connect('mongodb://localhost/flowse', {useNewUrlParser: true})
   .then(x => {

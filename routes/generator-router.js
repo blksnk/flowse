@@ -9,49 +9,25 @@ const spotify = new spotifyAPI({
     redirectURL: "http://localhost:5000/generate/result",
 });
 
-router.get("/generate", (req, res, next) => {
-	const {spotifyToken, lastfmToken, soundcloudToken} = req.user.tokens;
-
-	if(spotifyToken && !lastfmToken && !soundcloudToken) {
-		res.redirect('/generate/sp');
-	}
-	else if (!spotifyToken && lastfmToken && !soundcloudToken) {
-		res.redirect('/generate/lf')
-	}
-	else if (!spotifyToken && !lastfmToken && soundcloudToken) {
-		res.redirect('/generate/sc')
-	}
-	else if (spotifyToken && lastfmToken && !soundcloudToken) {
-		res.redirect('/generate/sp-lf');
-	}
-	else if (!spotifyToken && lastfmToken && soundcloudToken) {
-		res.redirect('/generate/sc-lf')
-	}
-	else if (spotifyToken && !lastfmToken && soundcloudToken) {
-		res.redirect('/generate/sp-sc')
-	}
-	else if (spotifyToken && lastfmToken && soundcloudToken) {
-		res.redirect('/generate/sp-sc-lf')
-	}
-})
-
 function sortByFrequency(array) {
-			    var frequency = {};
+    var frequency = {};
 
-			    array.forEach(function(value) { frequency[value] = 0; });
+    array.forEach(function(value) { frequency[value] = 0; });
 
-			    var uniques = array.filter(function(value) {
-			        return ++frequency[value] == 1;
-			    });
+    var uniques = array.filter(function(value) {
+        return ++frequency[value] == 1;
+    });
 
-			    return uniques.sort(function(a, b) {
-			        return frequency[b] - frequency[a];
-			    });
-			}
+    return uniques.sort(function(a, b) {
+        return frequency[b] - frequency[a];
+    });
+}
 
-router.get("/generate/sp", (req, res, next) => {
-	const {spotifyToken} = req.user.tokens;
-	spotify.setAccessToken(spotifyToken);
+router.get("/generate", (req, res, next) => {
+	const {spotifyToken, lastfmToken, soundcloudToken, deezerToken} = req.user.tokens;
+
+	if(spotifyToken) {
+		spotify.setAccessToken(spotifyToken);
 
 	// get top genres
 	spotify.getMyTopArtists({limit: 20})
@@ -87,13 +63,25 @@ router.get("/generate/sp", (req, res, next) => {
 			console.log(genreList);
 
 			
-			spotify.getRecommendations({seed_genres: genreList, limit: 5})
-				.then(recommandation => {
-					res.send(recommandation);
-				})
 		})
 		.catch(err => next(err));
+	}
+
+	if (lastfmToken)
+
+
+	// generate results
+
+	spotify.searchTracks(genreList, {limit: 5})
+		.then(result => {
+			res.send(result);
+		})
+		.catch(err => next(err))
+
 })
+
+
+
 
 
 
