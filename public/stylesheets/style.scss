@@ -68,13 +68,19 @@ h2 {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 30px;
-	padding: 10px;
+	padding: 15px;
 	color: white;
 	background-color: #383838;
 	font-size: 15px;
 	border-radius: 8px;
 	width: 500px;
 	box-shadow: 5px 10px 30px #2A2727;
+
+	h2 {
+		padding-left: 40px;
+		margin-bottom: 0;
+		font-size: 40px;
+	}
 
 	form {
 		display: flex;
@@ -197,11 +203,6 @@ h2 {
 	flex-direction: column;
 	width: 800px;
 
-	h2 {
-		padding-left: 40px;
-		font-size: 40px;
-	}
-
 	.one-track {
 		display: flex;
 		justify-content: space-evenly;
@@ -251,11 +252,117 @@ h2 {
 			background-color: #2692B7;
 		}
 	}
+}
+
+//#################### ACCOUNT #######################
+
+.account {
+//#################### OVERVIEW ######################
+	.card {
+		width: 500px;
+		flex-direction: column;
+
+		h4 {
+			display: block;
+		}
+
+		ul {
+			margin: 0;
+			padding-left: 0;
+			display: flex;
+			justify-content: space-evenly;
+			
+			li {
+				display: inline-block;
+				list-style-type: none;
+			}
+		}
+	}
+
+	//################# INFO MODIFY #######################
+
+	.detail {
+		input {
+			width: 60%;
+		}
+
+		.button-right {
+			margin-left: 410px;
+		}
+
+		
+
+
+	}
+
+	.cancel:hover {
+			width: 120px;
+		}
+
+//###################### BOTTOM BUTTONS ###################
+	.connect-with {
+
+
+
+		.info {
+			
+			background-color: transparent;
+			border: 1px solid white;
+		}
+
+		.serv {
+			background-image: linear-gradient(to right, #8EF3B1, #81C8DF, #D68F8F, #E6996F)
+		}
+
+		.cancel {
+			background-color: #E83A3A;
+
+		}
+	}
 
 
 }
 
+//##################### SERVICE MANAGEMENT #################
 
+.services {
+
+	.modify {
+		width: 280px;
+
+		.one-service {
+			list-style-type: none;
+			
+			display: flex;
+			justify-content: space-between;
+
+			align-items: center;
+
+			.service-modify {
+				margin-top: 0;
+				width: 180px;
+
+				.add {
+					background-color: #1DB954;
+				}
+
+				.remove {
+					background-color: #E83A3A;
+				}
+
+				.add:hover {
+					width: 70px;
+				}
+
+				.remove:hover {
+					width: 100px;
+				}
+			}
+		}
+	}
+
+	
+}
 
 
 

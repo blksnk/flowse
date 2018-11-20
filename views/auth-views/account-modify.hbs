@@ -1,29 +1,44 @@
-{{>flash_messages}}
+<h2>Modify personal info.</h2>
 
-<h2>Modify your personal details</h2>
+<div class="flex-center account">
+	<div class="card detail">
+		{{>flash_messages}}
 
-<form action="/account/modify/process-changes" method="POST">
-	<label>
-		Username: 
-		<input type="text" name="userName" value="{{currentUser.userName}}">
-	</label>
-	
-	<label>
-		Email: 
-		<input type="email" name="email" value="{{currentUser.email}}">
-	</label>
 
-	<label>
-		Current password: 
-		<input type="password" name="orginalPassword">
-	</label>
+		<form action="/account/modify/process-changes" method="POST">
+			<label>
+				Username: 
+				<input type="text" name="userName" value="{{currentUser.userName}}"  required="true">
+			</label>
+			
+			<label>
+				Email: 
+				<input type="email" name="email" value="{{currentUser.email}}" required="true">
+			</label>
 
-	<label>
-		New password: 
-		<input type="password" name="newPassword">
-	</label>
+			<label>
+				Current password: 
+				<input type="password" name="orginalPassword" required="true">
+			</label>
 
-	<button>Save changes</button>
-</form>
+			<label>
+				New password: 
+				<input type="password" name="newPassword">
+			</label>
 
-<a href="/account">Cancel</a>
+			<div class="button-right">
+				<div class="button-anim">
+					<button>Save changes</button>
+					<i class="fas fa-long-arrow-alt-right"></i>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="connect-with">
+		<div class="connect cancel">
+			<a class="inner" href="/account">Cancel</a>
+		</div>
+	</div>
+
+</div>

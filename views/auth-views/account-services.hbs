@@ -1,0 +1,62 @@
+<h2>Add or remove services.</h2>
+
+<div class="flex-center services">
+
+	{{flash_messages}}
+	<div class="card modify">
+		
+		<ul>
+			<li class="one-service">
+				<div class="service-name">
+					<h4>Spotify</h4>
+				</div>
+				<div class="service-modify connect-with">
+
+					{{#if currentUser.tokens.spotifyToken}}
+					<div class="connect remove sp">
+						<a class="inner" href="/account/services/rm/spotify">Remove</a>
+					</div>
+					{{else}}
+					<div class="connect add sp">
+						<a class="inner" href="/account/services/add/spotify">Add</a>
+					</div>	
+					{{/if}}
+				</div>
+			</li>
+
+			<li class="one-service">
+				<div class="service-name">
+					<h4>Deezer</h4>
+				</div>
+				<div class="service-modify connect-with">
+					{{#if currentUser.tokens.deezerToken}}
+					<div class="connect remove dz">
+						<a class="inner" href="/account/services/rm/deezer">Remove</a>
+					</div>
+					{{else}}
+					<div class="connect add dz">
+						<a class="inner" href="/account/services/add/deezer">Add</a>
+					</div>
+					{{/if}}
+				</div>
+			</li>
+
+			<li class="one-service">
+				<div class="service-name">
+					<h4>Last.fm</h4>
+				</div>
+				<div class="service-modify connect-with">
+					{{#if currentUser.tokens.lastfmToken}}
+					<div class="connect remove lf">
+						<a class="inner" href="/account/services/rm/lastfm">Remove</a>
+					</div>
+					{{else}}
+					<div class="connect add lf">
+						<a class="inner" href="/account/services/add/lastfm">Add</a>
+					</div>
+					{{/if}}
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

@@ -54,13 +54,17 @@ h2 {
   display: flex;
   justify-content: center;
   margin-bottom: 30px;
-  padding: 10px;
+  padding: 15px;
   color: white;
   background-color: #383838;
   font-size: 15px;
   border-radius: 8px;
   width: 500px;
   box-shadow: 5px 10px 30px #2A2727; }
+  .card h2 {
+    padding-left: 40px;
+    margin-bottom: 0;
+    font-size: 40px; }
   .card form {
     display: flex;
     flex-direction: column;
@@ -148,9 +152,6 @@ h2 {
 .results .card {
   flex-direction: column;
   width: 800px; }
-  .results .card h2 {
-    padding-left: 40px;
-    font-size: 40px; }
   .results .card .one-track {
     display: flex;
     justify-content: space-evenly;
@@ -178,5 +179,57 @@ h2 {
       background-color: #BA0000; }
     .results .card .one-track .dz:hover {
       background-color: #2692B7; }
+
+.account .card {
+  width: 500px;
+  flex-direction: column; }
+  .account .card h4 {
+    display: block; }
+  .account .card ul {
+    margin: 0;
+    padding-left: 0;
+    display: flex;
+    justify-content: space-evenly; }
+    .account .card ul li {
+      display: inline-block;
+      list-style-type: none; }
+
+.account .detail input {
+  width: 60%; }
+
+.account .detail .button-right {
+  margin-left: 410px; }
+
+.account .cancel:hover {
+  width: 120px; }
+
+.account .connect-with .info {
+  background-color: transparent;
+  border: 1px solid white; }
+
+.account .connect-with .serv {
+  background-image: linear-gradient(to right, #8EF3B1, #81C8DF, #D68F8F, #E6996F); }
+
+.account .connect-with .cancel {
+  background-color: #E83A3A; }
+
+.services .modify {
+  width: 280px; }
+  .services .modify .one-service {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+    .services .modify .one-service .service-modify {
+      margin-top: 0;
+      width: 180px; }
+      .services .modify .one-service .service-modify .add {
+        background-color: #1DB954; }
+      .services .modify .one-service .service-modify .remove {
+        background-color: #E83A3A; }
+      .services .modify .one-service .service-modify .add:hover {
+        width: 70px; }
+      .services .modify .one-service .service-modify .remove:hover {
+        width: 100px; }
 
 /*# sourceMappingURL=style.css.map */
