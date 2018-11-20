@@ -13,11 +13,18 @@ passport.use(new LastFmStrategy({
   'callbackURL': "http://localhost:5000/auth/lastfm/callback"
 }, function(req, sessionKey, done) {
 
+  
+
+
   // Get the user info
   console.log(sessionKey);
   const {name, key} = sessionKey;
 
-  User.create({userName: name, email: "example@email.com", tokens: { lastfmToken: key}}, 
+  const randomEmail = String(name.concat(Math.floor(Math.random() * 100), "@gmail.com"));
+
+  console.log(randomEmail);
+
+  User.create({userName: name, email: randomEmail, tokens: { lastfmToken: key}}, 
     function(err, user) {
     
     if (err) return done(err);

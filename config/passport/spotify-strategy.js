@@ -22,45 +22,37 @@ passport.use(
     },
     function(accessToken, refreshToken, expires_in, profile, done) {
       process.nextTick( () => {
+
+        //login and signup
         User.findOne( {email: { $eq: profile._json.email } } )
           .then(userDoc => {
             if(userDoc) {
 
-              if (userDoc.tokens.spotifyToken)
+              if (!userDoc.tokens.spotifyToken) {
+                User.findOneAndUpdate(userDoc._id, {$set: {tokens: {spotifyToken: accessToken, spotifyRefresh: refreshToken}}})
+                  .then(userDoc => {
+                    console.log("success", 'Spotify account linked')
+                    done(null, userDoc);
+                    return;
+                  })
+                  .catch(err => done(err))
+              }
 
               // if user has account, refresh his access token
-              // spotify.setAccessToken(userDoc.tokens.spotifyToken);
-              // spotify.setRefreshToken(userDoc.tokens.spotifyRefresh);
-              // console.log("refreshing token")
-              // spotify.refreshAccessToken()
-              //   .then(data => {
-              //     const newToken = data.body['access_token'];
-                  
-              //     spotifyApi.setAccessToken(newToken);
-                  
-              //     User.findByIdAndUpdate(userDoc._id, {$set: {tokens: {spotifyToken: newToken}}})
-              //     .then(doc => {
-              //       console.log("TOKEN REFRESH, new token: ", newToken);
+              if(userDoc.tokens.spotifyToken) {
+                  return done(null, userDoc);
+              }
 
-                return done(null, userDoc);
-              //     })
-              //     .catch(err => done(err));
-              //   })
-              //   .catch(err => done(err));
-
-              // console.log("user login")
-              // return done(null, userDoc);
-            }
-
-            User.create({ userName : profile.id, email: profile._json.email, tokens: {spotifyToken: accessToken , spotifyRefresh: refreshToken} })
-              .then(userDoc => {
-                // call done with null when the result is successful
-                // (the result is the user document from the database)
-                console.log("user CREATE")
-                return done(null, userDoc);
-              })
-              // call done with the error object if it fails
-              .catch(err => done(err));         
+              User.create({ userName : profile.id, email: profile._json.email, tokens: {spotifyToken: accessToken , spotifyRefresh: refreshToken} })
+                .then(userDoc => {
+                  // call done with null when the result is successful
+                  // (the result is the user document from the database)
+                  console.log("user CREATE")
+                  return done(null, userDoc);
+                })
+                // call done with the error object if it fails
+                .catch(err => done(err));   
+            }      
           })
           .catch(err => done(err));
       })

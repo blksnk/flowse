@@ -8,11 +8,12 @@ const User = require('../models/user-model.js');
 
 const bcrypt = require('bcrypt');
 
+//redirect uri for accont linking
 const spotifyAPI = require('spotify-web-api-node');
 const spotify = new spotifyAPI({
-  clientID: process.env.SPOTIFY_KEY,
-    clientSecret: process.env.SPOTIFY_SECRET,
-    
+  clientId: process.env.SPOTIFY_KEY,
+  clientSecret: process.env.SPOTIFY_SECRET,
+  redirectUri: "http://localhost:5000/auth/spotify/link"
 });
 
 router.get("/signup", (req, res, next) => {
@@ -42,6 +43,29 @@ router.post("/process-signup", (req, res, next) => {
 
 })
 
+function refreshSpotify (userDoc) {
+	spotify.setAccessToken(userDoc.tokens.spotifyToken);
+	spotify.setRefreshToken(userDoc.tokens.spotifyRefresh);
+	spotify.refreshAccessToken()
+        .then(data => {
+        	const oldToken = userDoc.tokens.spotifyToken;
+        	const newToken = data.body['access_token'];
+          
+        	spotifyApi.setAccessToken(newToken);
+          
+        	User.findByIdAndUpdate(userDoc._id, {$set: {"tokens.spotifyToken": newToken}})
+        		.then(userDoc => {
+            		console.log("TOKEN REFRESH, new token: ", newToken, "\n old token: ", oldToken);
+            		req.logIn(userDoc, () => {
+						req.flash("success", "Login successfull")
+						res.redirect("/");
+					});
+     			 })
+        		.catch(err => next(err));
+		})
+        .catch(err => next(err));
+}
+
 router.post("/auth/default", (req, res, next) => {
 	const { email, originalPassword } = req.body;
 
@@ -63,33 +87,12 @@ router.post("/auth/default", (req, res, next) => {
 				res.redirect("/login");
 			}
 			else {
-
+				if (req.user.tokens.spotifyToken) {
+				refreshSpotify(userDoc)
+					
+				}
 				//refresh SPOTIFY token on login...
-				spotify.setAccessToken(userDoc.tokens.spotifyToken);
-            	spotify.setRefreshToken(userDoc.tokens.spotifyRefresh);
-            	spotify.refreshAccessToken()
-	                .then(data => {
-	                	const oldToken = userDoc.tokens.spotifyToken;
-	                	const newToken = data.body['access_token'];
-	                  
-	                	spotifyApi.setAccessToken(newToken);
-	                  
-	                	User.findByIdAndUpdate(userDoc._id, {$set: {tokens: {spotifyToken: newToken}}})
-	                		.then(doc => {
-	                    		console.log("TOKEN REFRESH, new token: ", newToken, "\n old token: ", oldToken);
-	                    		return;
-	                 			 })
-	                		.catch(err => next(err));
-	                			})
-	                .catch(err => next(err));
-
-	            // ...while logging in	
-				req.logIn(userDoc, () => {
-					req.flash("success", "Login successfull")
-					res.redirect("/");
-				});
-
-			}
+	  		}
 		})
 		.catch(err => next(err));
 });
@@ -112,34 +115,25 @@ router.get("/auth/spotify",
   }
 	);
 
-router.get('/auth/spotify/callback/',
+router.get('/auth/spotify/link', (req, res, next) => {
+	// res.send([req.query, req.user]);
+	const code = req.query.code;
+	console.log(req.query.code) //access token for that account
+
+	//
+	spotify.authorizationCodeGrant(code);
+
+	User.findByIdAndUpdate(req.user._id, {$set: {"tokens.spotifyToken": req.query.code}})
+  		.then(userDoc => {
+  			req.flash('success', 'Spotify account link successful');
+  			return res.redirect('/account/services');
+  		})
+  		.catch(err => next(err));
+})
+
+router.get('/auth/spotify/callback',
 	passport.authenticate('spotify', { failureRedirect: '/login' }),
-		(req, res) => {
-			const code = req.query.code;
-
-			// spotify.authorizationCodeGrant(code)
-			// 	.then(data => {
-			// 		spotify.setAccessToken(data.body['access_token']);
-   //          		spotify.setRefreshToken(data.body['refresh_token']);
-
-   //          		spotify.refreshAccessToken()
-		 //                .then(data => {
-		 //                	const newToken = data.body['access_token'];
-		                  	
-		 //                	spotifyApi.setAccessToken(newToken);
-		                  
-		 //                	User.findByIdAndUpdate(userDoc._id, {$set: {tokens: {spotifyToken: newToken}}})
-		 //                		.then(doc => {
-		 //                    		console.log("TOKEN REFRESH, new token: ", newToken);
-		 //                    		return;
-		 //                		})
-		 //                		.catch(err => next(err));
-		 //                		})
-   //              		.catch(err => next(err));
-			// 	})
-			// 	.catch(err => next(err));
-
-            
+		(req, res) => {	
 
 			if (!req.user.password) {
 				req.flash("success", "log in successful, please input your password")
@@ -153,7 +147,7 @@ router.get('/auth/spotify/callback/',
 );
 
 
-////LASTFM
+//######################## LASTFM ######################
 router.get('/auth/lastfm', passport.authenticate('lastfm'));
 
 router.get('/auth/lastfm/callback', function(req, res, next){
@@ -161,20 +155,18 @@ router.get('/auth/lastfm/callback', function(req, res, next){
   	function(err, user, sesh){
   	
 
-  	console.log(user);
-  	console.log(req.user);
-	
- //  	if (!req.user.password && req.user.email) {
- //  		req.flash("error", "please set your password")
- //  		res.redirect('/account/modify')
- //  	}
+  	console.log({err, user, sesh});
+	req.logIn(user, function() {
 
-	// if(!req.user.email && !req.user.password) {
-	// 	req.flash('success', 'Account successfully created, please enter valid email address and password')
-	//     res.redirect('/account/modify');
-	// }
+		if(!req.user.password) {
+			req.flash('success', 'Account successfully created, please enter valid email address and password')
+		    res.redirect('/account/modify');
+		    return;
+		}
+		
+		res.redirect('/');
+	});
 
-	res.redirect('/');
   })(req, {} );
 });
 
@@ -291,14 +283,29 @@ router.get('/account/services', (req, res, next) => {
 })
 
 router.get('/account/services/add/:platform', (req, res, next) => {
-	
+	const {platform} = req.params;
+
+	if(platform === "spotify") {
+
+		res.redirect('https://accounts.spotify.com/authorize?client_id=2a2016384e4643778797698a67984cfe&response_type=code&redirect_uri=http://localhost:5000/auth/spotify/link&scope=user-read-email%20user-read-private%20user-follow-read%20user-top-read%20user-library-read&state=add');
+		// generate request url
+
+		// var scopes = ['user-read-email', 'user-read-private', 'user-follow-read', 'user-top-read', 'user-library-read'],
+		// state = "add";
+
+		// var authorizeURL = spotify.createAuthorizeURL(scopes, state);
+		// console.log(authorizeURL);
+
+      	
+	    
+	}
 })
 
 router.get('/account/services/rm/:platform', (req, res, next) => {
 	const {platform} = req.params;
 
 	if(platform === "spotify") {
-		User.findByIdAndUpdate(req.user._id, {$unset: {tokens: {spotifyToken: 1}}})
+		User.findByIdAndUpdate(req.user._id, {$unset: {"tokens.spotifyToken": 1}})
 			.then(userDoc => {
 				req.flash('success', 'Spotify account unlinked');
 				return res.redirect('/account/services')
@@ -307,7 +314,7 @@ router.get('/account/services/rm/:platform', (req, res, next) => {
 	}
 
 	if(platform === "deezer") {
-		User.findByIdAndUpdate(req.user._id, {$unset: {tokens: {deezerToken: 1}}})
+		User.findByIdAndUpdate(req.user._id, {$unset: {"tokens.deezerToken": 1}})
 			.then(userDoc => {
 				req.flash('success', 'Deezer account unlinked');
 				return res.redirect('/account/services')
@@ -316,7 +323,7 @@ router.get('/account/services/rm/:platform', (req, res, next) => {
 	}
 
 	if(platform === "lastfm") {
-		User.findByIdAndUpdate(req.user._id, {$unset: {tokens: {lastfmToken: 1}}})
+		User.findByIdAndUpdate(req.user._id, {$unset: {"tokens.lastfmToken": 1}})
 			.then(userDoc => {
 				req.flash('success', 'Spotify account unlinked');
 				return res.redirect('/account/services')
