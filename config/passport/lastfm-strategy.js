@@ -20,18 +20,23 @@ passport.use(new LastFmStrategy({
   'callbackURL': "http://localhost:5000/auth/lastfm/callback"
 }, function(req, sessionKey, done) {
   // Get the user info
-
-  // Create the user in the database
   console.log(sessionKey);
-  User.create({ userName: sessionKey.name, email: "example@mail.com", tokens: {lastfmToken: sessionKey.key} })
-  .then( userDoc => {
-    lfm.user.getInfo(sessionKey.key, function (err, info) {
-      console.log("INFO: ", info)
-      done(null, userDoc);
-    }
-  )})
+  const {name, key} = sessionKey;
 
-  .catch(err => next(err));
+  User.create({userName: name, email: "example@email.com", tokens: { lastfmToken: key}}, 
+    function(err, user) {
+    
+    if (err) return done(err);
+
+      console.log(`user ${user.userName} added`);
+      return done(err, user, sessionKey);
+  })
+    
 
 }));
+
+
+
+
+
 

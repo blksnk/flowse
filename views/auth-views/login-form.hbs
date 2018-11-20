@@ -2,40 +2,42 @@
 
 <div class="flex-center">
 	
-
-<div class="form-card">
+<div class="card">
 	
-	{{>flash_messages}}
-<form action="/auth/default" method="POST">
+{{>flash_messages}}
 
+<form action="/auth/default" method="POST">
 
 	<label>
 		<p>Email</p>
-		<input type="email" name="email" placeholder="Your email">
+		<input type="email" name="email">
 	</label>
 
 	<label>
 		<p>Password</p>
-		<input type="password" name="originalPassword" placeholder="It's a secret">
+		<input type="password" name="originalPassword">
 	</label>
 
 	<div class="button-right">
-		<button>Log in <i class="fas fa-long-arrow-alt-right"></i></button>
+		<div class="button-anim">
+			<button>Log in</button>
+			<i class="fas fa-long-arrow-alt-right"></i>
+		</div>
 	</div>
 </form>
 </div>
 
 <div class="connect-with">
 	<div class="connect sp">
-		<a class="hidden" href="/auth/spotify">Log in with Spotify</a>
+		<a class="inner" href="/auth/spotify">Log in with Spotify</a>
 	</div>
 
 	<div class="connect lf">
-		<a class="hidden" href="/auth/lastfm">Log in with Last.fm</a>
+		<a class="inner" href="/auth/lastfm">Log in with Last.fm</a>
 	</div>
 
 	<div class="connect dz">
-		<a class="hidden" href="/auth/deezer">Log in with Deezer</a>
+		<a class="inner" href="/auth/deezer">Log in with Deezer</a>
 	</div>
 </div>
 

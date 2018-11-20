@@ -41,89 +41,92 @@ router.get("/generate", (req, res, next) => {
 
 	
 	if(spotifyToken) {
+
+		console.log("sp token here, refreshing 🎧");
+
 		spotify.setAccessToken(spotifyToken);
 		spotify.setRefreshToken(spotifyRefresh);
-		spotify.refreshAccessToken()
-			.then(token => {
-				spotify.setAccessToken(token);	
-			})
+		// spotify.refreshAccessToken()
+		// 	.then(data => {
 
-	// get top genres
-	spotify.getMyTopArtists({limit: 20})
-		.then(artistDoc => {
-			const topArtists = artistDoc.body.items;
+				// console.log("token refresh 🎷");
+				// spotify.setAccessToken(data.body['access_token']);
+				// spotify.setRefreshToken(data.body['refresh_token']);
 
-			//Loop over each artist and push genres to array
-			topArtists.forEach( (oneArtist) => {
-				topGenres = topGenres.concat(oneArtist.genres);
-				artistNames = artistNames.concat(oneArtist.name);
-			});
+				// get top genres
+				spotify.getMyTopArtists({limit: 20})
+					.then(artistDoc => {
+						const topArtists = artistDoc.body.items;
 
-			const sortedArtists = sortByFrequency(artistNames);
-			const sortedGenres = sortByFrequency(topGenres);
+						//Loop over each artist and push genres to array
+						topArtists.forEach( (oneArtist) => {
+							topGenres = topGenres.concat(oneArtist.genres);
+							artistNames = artistNames.concat(oneArtist.name);
+						});
 
-			// res.send(sortedGenres, sortedArtists);
-			// res.send(topArtists);
-			// res.render("generate-result.hbs")
+						const sortedArtists = sortByFrequency(artistNames);
+						const sortedGenres = sortByFrequency(topGenres);
+
+						// res.send(sortedGenres, sortedArtists);
+						// res.send(topArtists);
+						// res.render("generate-result.hbs")
 
 
 
-			// get recommandation
-			const selected = sortedGenres.slice(0, 1);
+						// get recommandation
+						const selected = sortedGenres.slice(0, 1);
 
-			genreList = selected.reduce( (sum, genre) => {
-				return sum + " " + genre;
-			})
+						genreList = selected.reduce( (sum, genre) => {
+							return sum + " " + genre;
+						})
 
-			
+						
 
-			console.log(genreList);
+						console.log(genreList);
 
-			//####################################### SPOTIFY ###########################
-			spotify.searchTracks(genreList, {limit: 5})
-				.then(result => {
+						//####################################### SPOTIFY ###########################
+						spotify.searchTracks(genreList, {limit: 5})
+							.then(result => {
 
-					res.locals.spotifyResults = result.body.tracks.items;
-					// res.render('generator-views/result.hbs');
-					// res.send(result);
-					
-					//####################################### DEEZER ###########################
-					if (deezerToken) {
-						console.log(deezerToken);
-						deezer.request(deezerToken, {
-							resource: 'search/track',
-							method: 'GET',
-							fields: {
-								q: genreList, 
-								limit: 5
-							},
+								res.locals.spotifyResults = result.body.tracks.items;
+								// res.render('generator-views/result.hbs');
+								// res.send(result);
+								
+								//####################################### DEEZER ###########################
+								if (deezerToken) {
+									console.log(deezerToken);
+									deezer.request(deezerToken, {
+										resource: 'search/track',
+										method: 'GET',
+										fields: {
+											q: genreList, 
+											limit: 5
+										},
 
-						},
-						function done (err, result) {
-							if(err) next(err);
+									},
+									function done (err, result) {
+										if(err) next(err);
 
-							console.log(result);
-							res.locals.deezerResults = result.data;
-							// res.send(result);
-							res.render('generator-views/result.hbs');
-						}
-					)}
-					else {
-						res.render('generator-views/result.hbs');
-					}
+										console.log(result);
+										res.locals.deezerResults = result.data;
+										// res.send(result);
+										res.render('generator-views/result.hbs');
+									}
+								)}
+								else {
+									res.render('generator-views/result.hbs');
+								}
 
-				})
-				.catch(err => next(err));
-			
-		})
-		.catch(err => next(err));
+							})
+							.catch(err => next(err));
+						
+					})
+					.catch(err => next(err));
+
+			// })
+			// .catch(err => next(err));
+
 	}
-
-	
-
-
-	//generate results
-
 
 })
 
