@@ -121,14 +121,22 @@ router.get('/auth/spotify/link', (req, res, next) => {
 	console.log(req.query.code) //access token for that account
 
 	//
-	spotify.authorizationCodeGrant(code);
+	spotify.authorizationCodeGrant(code)
+		.then(data => {
+			console.log(data);
+			console.log(req.user);
+			User.findByIdAndUpdate(req.user._id, {$set: {"tokens.spotifyToken": data.body.access_token, "tokens.spotifyRefresh": data.body.refresh_token}})
+  				.then(userDoc => {
+		  			req.flash('success', 'Spotify account link successful');
+		  			return res.redirect('/account/services');
+		  			
+				})
+		  		
+		  		.catch(err => next(err));
+		})
+		.catch(err => next(err));
 
-	User.findByIdAndUpdate(req.user._id, {$set: {"tokens.spotifyToken": req.query.code}})
-  		.then(userDoc => {
-  			req.flash('success', 'Spotify account link successful');
-  			return res.redirect('/account/services');
-  		})
-  		.catch(err => next(err));
+	
 })
 
 router.get('/auth/spotify/callback',

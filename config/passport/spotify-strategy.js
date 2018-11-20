@@ -42,7 +42,8 @@ passport.use(
               if(userDoc.tokens.spotifyToken) {
                   return done(null, userDoc);
               }
-
+            }
+            else {
               User.create({ userName : profile.id, email: profile._json.email, tokens: {spotifyToken: accessToken , spotifyRefresh: refreshToken} })
                 .then(userDoc => {
                   // call done with null when the result is successful
@@ -52,6 +53,7 @@ passport.use(
                 })
                 // call done with the error object if it fails
                 .catch(err => done(err));   
+            
             }      
           })
           .catch(err => done(err));

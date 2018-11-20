@@ -27,8 +27,6 @@ function sortByFrequency(array) {
     });
 }
 
-
-
 router.get("/generate", (req, res, next) => {
 	if(!req.user) {
 		req.flash('error', 'Please log in to generate custom results');
@@ -59,6 +57,7 @@ router.get("/generate", (req, res, next) => {
 		console.log(req.user.tokens);
 
 		// refresh existing token
+		
 		spotify.setAccessToken(req.user.tokens.spotifyToken);
 		spotify.setRefreshToken(req.user.tokens.spotifyRefresh);
 		spotify.refreshAccessToken()
@@ -70,7 +69,7 @@ router.get("/generate", (req, res, next) => {
 	        		.then(userDoc => {
 	            		console.log("TOKEN REFRESH SUCCESS" );
 	            		
-	 //            		//use new token
+						//use new token
 	            		spotify.setAccessToken(newToken);
 
 	            		spotify.getMyTopArtists({limit: 20})
