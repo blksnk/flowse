@@ -5,15 +5,23 @@ const passport = require('passport');
 const router = express.Router();
 
 const User = require('../models/user-model.js');
+const History = require('../models/history-model.js')
 
 const bcrypt = require('bcrypt');
 
-//redirect uri for accont linking
+//redirect uri for account linking
 const spotifyAPI = require('spotify-web-api-node');
 const spotify = new spotifyAPI({
   clientId: process.env.SPOTIFY_KEY,
   clientSecret: process.env.SPOTIFY_SECRET,
   redirectUri: "http://localhost:5000/auth/spotify/link"
+});
+
+const deezerAPI = require('node-deezer');
+const deezer = new deezerAPI({
+	clientID: process.env.DEEZER_KEY,
+    clientSecret: process.env.DEEZER_SECRET,
+    redirectURL: "http://localhost:5000/generate/result",
 });
 
 router.get("/signup", (req, res, next) => {
@@ -66,6 +74,16 @@ function refreshSpotify (userDoc) {
         .catch(err => next(err));
 }
 
+function getRecent (user, req, res) {
+
+	spotify.setAccessToken(user.tokens.spotifyToken);
+	spotify.getMySavedTracks({limit: 50, offset: 0})
+				.then(data => {
+					console.log(data);
+				})
+				.catch(err => console.log(err))
+}
+
 router.post("/auth/default", (req, res, next) => {
 	const { email, originalPassword } = req.body;
 
@@ -107,7 +125,7 @@ router.get("/login", (req, res, next) => {
 
 router.get("/auth/spotify", 
 	passport.authenticate("spotify", {
-		scope: ['user-read-email', 'user-read-private', 'user-follow-read', 'user-top-read', 'user-library-read']
+		scope: ['user-read-email', 'user-read-recently-played', 'user-read-private', 'user-follow-read', 'user-top-read', 'user-library-read']
 	}), 
 	function(req, res) {
     // The request will be redirected to spotify for authentication, so this
@@ -135,13 +153,13 @@ router.get('/auth/spotify/link', (req, res, next) => {
 		  		.catch(err => next(err));
 		})
 		.catch(err => next(err));
-
-	
 })
 
 router.get('/auth/spotify/callback',
 	passport.authenticate('spotify', { failureRedirect: '/login' }),
 		(req, res) => {	
+
+			console.log("USER ID -------------", req.user._id )
 
 			if (!req.user.password) {
 				req.flash("success", "log in successful, please input your password")
@@ -149,8 +167,41 @@ router.get('/auth/spotify/callback',
 			}
 			else {
 				req.flash("success", "log in successfull");
+
 				res.redirect("/");
 			}
+
+			//store users recently played tracks on login
+			History.create({userId: req.user._id})
+				.then(historyDoc => {
+					console.log(historyDoc)
+					
+					console.log('history doc created, fetching data...')
+					spotify.setAccessToken(req.user.tokens.spotifyToken);
+					spotify.getMySavedTracks({limit: 16, offset: 0})
+						.then(data => {
+							const result = data.body.items;
+
+							result.forEach(oneResult => {
+								const name = oneResult.track.name;
+								const artist = oneResult.track.artists[0].name;
+								const url = oneResult.track.external_urls.spotify;
+								const track = {
+									name: name,
+									artist: artist,
+									url: url
+								}
+								
+								History.findByIdAndUpdate(historyDoc._id, {$push: {spotify: track}})
+									.then(historyDoc => {
+										console.log('pushed : ', track);	
+									})
+									.catch(err => console.log(err))
+							})	
+						})
+						.catch(err => console.log(err))
+				})
+				.catch(err => console.log(err));
 	}
 );
 
@@ -183,15 +234,65 @@ router.get('/auth/lastfm/callback', function(req, res, next){
 
 router.get('/auth/deezer', 
 	passport.authenticate("deezer", {
-		scope: ['basic_access', 'email', 'manage_library', 'offline_access']
+		scope: ['basic_access','listening_history' , 'email', 'manage_library', 'offline_access']
 	}));
 
 
 router.get('/auth/deezer/callback', 
 	passport.authenticate('deezer', { failureRedirect: '/login' }),
   function(req, res) {
+
+  	if (!req.user.password) {
+				req.flash("success", "log in successful, please input your password")
+			    res.redirect("/account/modify");
+			}
+	else {
     // Successful authentication, redirect home.
-    res.redirect('/');
+		res.redirect('/');
+	}
+
+	History.create({userId: req.user._id})
+		.then(historyDoc => {
+			console.log(historyDoc)
+			console.log('history doc created, fetching data...')
+
+			deezer.request(req.user.tokens.deezerToken, {
+				resource: 'user/me/history',
+				method: 'GET',
+				fields: {
+					limit: 16,
+				},
+			},
+			function done (err, data) {
+				if (err) console.log(err);
+
+				const result = data.data;
+
+				result.forEach(oneResult => {
+					const name = oneResult.title;
+					const artist = oneResult.artist.name;
+					const url = oneResult.link;
+
+					const track = {
+						name: name,
+						artist: artist,
+						url: url
+					};
+
+					console.log(track);
+
+					History.findByIdAndUpdate(historyDoc._id, {$push: {deezer: track}})
+						.then(historyDoc => {
+							console.log("pushed: ", track)
+						})
+						.catch(err => console.log(err))
+				})
+			});
+		})
+		.catch(err => console.log(err))
+	console.log(req.user.tokens.deezerToken);
+	
+    
   });
 
 
@@ -218,11 +319,11 @@ router.get('/account', (req, res, next) => {
 
 
 router.get('/account/modify', (req, res, next) => {
-	// if(!req.user) {
-	// 	req.flash("error", "Please login to manage your account.")
-	// 	res.redirect('/login');
-	// 	return;
-	// }
+	if(!req.user) {
+		req.flash("error", "Please login to manage your account.")
+		res.redirect('/login');
+		return;
+	}
 	res.render('auth-views/account-modify.hbs');
 })
 
@@ -283,6 +384,23 @@ router.post('/account/modify/process-changes', (req, res, next) => {
 		})
 
 })
+
+router.get('/account/modify/confirm-delete', (req, res, next) => {
+	res.render('auth-views/delete.hbs')
+})
+
+router.get('/account/modify/delete', (req, res, next) => {
+
+	User.remove ({_id: req.user._id})
+		.then(userDoc => {
+			req.flash('success', 'Account deleted successfully');
+			req.logOut();
+			res.redirect('/')
+		})
+})
+
+
+
 
 //######################### SERVICE MANAGEMENT ############################
 

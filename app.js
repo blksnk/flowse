@@ -80,7 +80,6 @@ app.use((req, res, next) => {
   res.locals.messages = req.flash();
 
   res.locals.currentUser = req.user;
-
   
   // need this to trigger routers, else page will stay loading forever
   next(); 
@@ -98,6 +97,9 @@ const authRouter = require('./routes/auth-router.js');
 app.use('/', authRouter);
 
 const geneRouter = require('./routes/generator-router.js');
-app.use('/', geneRouter)
+app.use('/', geneRouter);
+
+const profileRouter = require('./routes/profile-router.js');
+app.use('/', profileRouter);
 
 module.exports = app;

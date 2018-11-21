@@ -1,4 +1,4 @@
-@font-face {
+	@font-face {
 	font-family: Euclid;
 	src: url('/fonts/Euclid.woff');
 }
@@ -38,6 +38,7 @@ h1, h2, h3 {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	width: 100%;
 }
 
 nav {
@@ -312,8 +313,12 @@ h2 {
 		}
 
 		.cancel {
-			background-color: #E83A3A;
+			background-color: #3AE8AB;
 
+		}
+
+		.delete {
+			background-color: #F03D3D;
 		}
 	}
 
@@ -437,3 +442,67 @@ h2 {
 // .textbox p {
 // 	font-size: 15px;
 // }
+
+
+//############################# USER PROFILE ################
+.columns {
+	display: flex;
+	justify-content: center;
+	width: 90%;
+}
+
+.section-title {
+	width: 100%
+}
+
+.pad-left {
+	margin-left: 3%;
+}
+
+.user-info {
+	flex-direction: column;
+}
+
+.user-services {
+	flex-direction: column;
+	ul {
+		list-style-type: none;
+		display: flex;
+		justify-content: space-around;
+
+		li {
+			display: inline-block;
+		}
+	}
+}
+
+.user-tracks {
+	width: 700px;
+	flex-direction: column;
+	justify-content: flex-start;
+
+
+	.track-list{
+		margin-top: 30px;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-evenly;
+		
+		.one-track {
+			width: 40%;
+			margin-bottom: 30px;
+			background-color: #2E2E2E;
+			border-radius: 4px;
+			padding: 15px;
+				
+
+
+			.title {
+				word-wrap: normal;
+
+			}
+		}
+	}
+
+}

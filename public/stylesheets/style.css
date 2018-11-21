@@ -30,7 +30,8 @@ h1, h2, h3 {
 .flex-center {
   display: flex;
   align-items: center;
-  flex-direction: column; }
+  flex-direction: column;
+  width: 100%; }
 
 nav {
   background-color: #353535;
@@ -211,7 +212,10 @@ h2 {
   background-image: linear-gradient(to right, #8EF3B1, #81C8DF, #D68F8F, #E6996F); }
 
 .account .connect-with .cancel {
-  background-color: #E83A3A; }
+  background-color: #3AE8AB; }
+
+.account .connect-with .delete {
+  background-color: #F03D3D; }
 
 .services .modify {
   width: 280px; }
@@ -290,5 +294,47 @@ h2 {
   background-color: rgba(255, 255, 200, 0.7);
   border-radius: 3px;
   box-sizing: border-box; }
+
+.columns {
+  display: flex;
+  justify-content: center;
+  width: 90%; }
+
+.section-title {
+  width: 100%; }
+
+.pad-left {
+  margin-left: 3%; }
+
+.user-info {
+  flex-direction: column; }
+
+.user-services {
+  flex-direction: column; }
+  .user-services ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around; }
+    .user-services ul li {
+      display: inline-block; }
+
+.user-tracks {
+  width: 700px;
+  flex-direction: column;
+  justify-content: flex-start; }
+  .user-tracks .track-list {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly; }
+    .user-tracks .track-list .one-track {
+      width: 40%;
+      margin-bottom: 30px;
+      background-color: #2E2E2E;
+      border-radius: 4px;
+      padding: 15px; }
+      .user-tracks .track-list .one-track .title {
+        word-wrap: normal; }
 
 /*# sourceMappingURL=style.css.map */

@@ -12,15 +12,18 @@
 
 	<header>
 		<nav>
-			<a href="/description" class="logo">flowse.</a>
-			<div>	
-			<a href="/">Home</a>
+			<div class="nav-element">
+				<a href="/" class="logo">flowse.</a>
+			</div>
+			
+			<div class="nav-element">
+				<a href="/generate">Generate</a>
 			</div>
 
 			<div class="nav-login">
 				{{#if currentUser}}
 				<a href="/logout">Logout</a>
-				<a href="/generate">Generate</a>
+				
 				<a href="/account">My Account</a>
 				{{else}}
 				<a href="/login">Login</a>

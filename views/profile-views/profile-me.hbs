@@ -1,0 +1,119 @@
+<h2>My profile.</h2>
+
+<div class="flex-center profile">
+	<div class="columns">
+		
+		<div class="card user-info">
+			<h2>About me</h2>
+
+			<h4>Username : {{currentUser.userName}}</h4>
+
+			<h4 class="user-descrpition">{{currentUser.description}}</h4>
+		</div>
+		
+		<div class="card user-services overview pad-left">
+			
+			<h2>My services</h2>
+
+			<ul>
+				{{#if currentUser.tokens.spotifyToken}}
+				<li>
+					<h4>Spotify</h4>
+				</li>
+				{{/if}}
+
+				{{#if currentUser.tokens.soundcloudToken}}
+				<li>
+					<h4>SoundCloud</h4>
+				</li>
+				{{/if}}
+
+				{{#if currentUser.tokens.deezerToken}}
+				<li>
+					<h4>Deezer</h4>
+				</li>
+				{{/if}}
+
+				{{#if currentUser.tokens.lastfmToken}}
+				<li>
+					<h4>Last.fm</h4>
+				</li>
+				{{/if}}
+			</ul>
+		</div>
+	</div>
+
+	<div class="section-title">
+		<h2>Recent listens.</h2>
+	</div>
+
+		<div class="columns">
+			
+			<div class="card user-tracks">
+
+				<div>
+					<h2>Spotify</h2>
+				</div>
+
+				<div class="track-list">
+					
+				{{#if currentUser.tokens.spotifyToken}}
+						
+					{{#each recentSpotify}}
+						<div class="one-track ">
+							<div class="title">
+								<h3>{{this.name}}</h3>
+							</div>
+							<div class="artist">
+								<p>{{this.artist}}</p>
+							</div>
+
+							<div class="link">	
+								<div class="connect sp">
+									<a target="_blank" rel="noopener noreferrer" class="inner" href="{{this.url}}">Listen on spotify</a>
+								</div>
+							</div>
+						</div>
+					{{/each}}
+					
+				{{else}}
+					<h4>Not connected. Connect Spotify to view your recent tracks.</h4>
+				{{/if}}
+				</div>
+			</div>
+
+			<div class="card user-tracks pad-left">
+
+				<div>
+					<h2>Deezer</h2>
+				</div>
+
+				<div class="track-list">
+					
+				{{#if currentUser.tokens.deezerToken}}
+						
+					{{#each recentDeezer}}
+						<div class="one-track ">
+							<div class="title">
+								<h3>{{this.name}}</h3>
+							</div>
+							<div class="artist">
+								<p>{{this.artist}}</p>
+							</div>
+
+							<div class="link">	
+								<div class="connect dz">
+									<a target="_blank" rel="noopener noreferrer" class="inner" href="{{this.url}}">Listen on spotify</a>
+								</div>
+							</div>
+						</div>
+					{{/each}}
+					
+				{{else}}
+					<h4>Not connected. Connect Spotify to view your recent tracks.</h4>
+				{{/if}}
+				</div>
+			</div>
+		</div>
+
+</div>
