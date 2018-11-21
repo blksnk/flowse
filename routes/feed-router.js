@@ -25,4 +25,9 @@ const History = require('../models/history-model.js');
 
 
 
+router.get("/feed", (req, res, next) => {
+  res.render('feed.hbs');
+});
+
+
 module.exports = router;

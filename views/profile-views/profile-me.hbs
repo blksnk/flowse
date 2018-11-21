@@ -1,14 +1,20 @@
-<h2>My profile.</h2>
+<h2>{{currentUser.userName}}'s profile.</h2>
 
 <div class="flex-center profile">
 	<div class="columns">
 		
-		<div class="card user-info">
+		<div class="card user-info-profile">
 			<h2>About me</h2>
 
-			<h4>Username : {{currentUser.userName}}</h4>
+			<h4 class="user-description">{{currentUser.description}}</h4>
+			
+			<div class="edit">	
+				<div class="connect edit-btn">
+					<i class="fas fa-pencil-alt icon"></i>
+					<a class="inner" href="{{this.url}}">Edit section</a>
+				</div>
+			</div>
 
-			<h4 class="user-descrpition">{{currentUser.description}}</h4>
 		</div>
 		
 		<div class="card user-services overview pad-left">
@@ -70,6 +76,7 @@
 
 							<div class="link">	
 								<div class="connect sp">
+									<i class="fas fa-play icon"></i>
 									<a target="_blank" rel="noopener noreferrer" class="inner" href="{{this.url}}">Listen on spotify</a>
 								</div>
 							</div>
@@ -103,6 +110,7 @@
 
 							<div class="link">	
 								<div class="connect dz">
+									<i class="fas fa-play icon"></i>
 									<a target="_blank" rel="noopener noreferrer" class="inner" href="{{this.url}}">Listen on spotify</a>
 								</div>
 							</div>

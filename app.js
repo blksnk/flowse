@@ -18,7 +18,6 @@ const passport     = require('passport');
 require('./config/passport/passport-setup.js');
 require('./config/passport/spotify-strategy.js');
 require('./config/passport/lastfm-strategy.js');
-
 require('./config/passport/deezer-strategy.js')
 
 mongoose
@@ -41,36 +40,34 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Express View engine setup
 
+// Express View engine setup
 app.use(require('node-sass-middleware')({
   src:  path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
   sourceMap: true
 }));
       
-
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
-
-// makes our app create sessions 
+// Makes our app create sessions 
 app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: "placeholder",
   store: new MongoStore( { mongooseConnection: mongoose.connection } ),
 }));
-// set up passport w/ our session (creates properties & methods for "req")
+
+// Set up passport w/ our session (creates properties & methods for "req")
 app.use(passport.initialize());
 app.use(passport.session());
 
-// enables flash messages in our routes with "req.flash()"
+// Enables flash messages in our routes with "req.flash()"
 app.use(flash());
-
 
 // this function will run before every single route
 // (put in what you need accessible on every page)
@@ -89,7 +86,6 @@ app.use((req, res, next) => {
 app.locals.title = 'Flowse';
 
 
-
 const index = require('./routes/index');
 app.use('/', index);
 
@@ -101,5 +97,9 @@ app.use('/', geneRouter);
 
 const profileRouter = require('./routes/profile-router.js');
 app.use('/', profileRouter);
+
+const feedRouter = require('./routes/feed-router.js');
+app.use('/', feedRouter);
+
 
 module.exports = app;

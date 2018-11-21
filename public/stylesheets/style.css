@@ -20,9 +20,6 @@ body {
   font-family: 'Euclid-Light';
   background-color: #2F2F2F; }
 
-a {
-  color: #00B7FF; }
-
 h1, h2, h3 {
   font-family: 'Euclid';
   color: white; }
@@ -141,6 +138,13 @@ h2 {
     text-decoration: none;
     transition-delay: 0;
     transition-duration: 0.1s; }
+  .connect .icon {
+    position: relative;
+    left: 25px;
+    color: #2E2E2E;
+    text-align: center;
+    z-index: 100;
+    transition-duration: 0.2s; }
 
 .connect:hover {
   width: 180px; }
@@ -149,6 +153,9 @@ h2 {
   color: white;
   transition-delay: 0.2s;
   transition-duration: 0.3s; }
+
+.connect:hover .icon {
+  display: none; }
 
 .results .card {
   flex-direction: column;
@@ -231,7 +238,7 @@ h2 {
         background-color: #1DB954; }
       .services .modify .one-service .service-modify .remove {
         background-color: #E83A3A; }
-      .services .modify .one-service .service-modify .add:hover {
+      .services .modify .one-service .service-modify head .add:hover {
         width: 70px; }
       .services .modify .one-service .service-modify .remove:hover {
         width: 100px; }
@@ -303,10 +310,16 @@ h2 {
 .section-title {
   width: 100%; }
 
+.edit {
+  display: flex;
+  justify-content: flex-end; }
+  .edit .edit-btn {
+    background-color: #3AE8AB; }
+
 .pad-left {
   margin-left: 3%; }
 
-.user-info {
+.user-info-profile {
   flex-direction: column; }
 
 .user-services {
@@ -336,5 +349,58 @@ h2 {
       padding: 15px; }
       .user-tracks .track-list .one-track .title {
         word-wrap: normal; }
+
+.textbox p {
+  font-size: 15px; }
+
+.wrapper-feed {
+  width: 1100px;
+  border: 1px solid black;
+  margin: 0 auto;
+  display: flex;
+  margin-top: 25px; }
+
+.left-bar {
+  width: 30%;
+  border: 1px solid black;
+  height: 800px;
+  display: flex;
+  align-items: center;
+  flex-direction: column; }
+
+.user-info {
+  height: 200px;
+  border: 1px solid yellow;
+  text-align: center;
+  color: white; }
+
+.user-info h5 {
+  font-size: 20px;
+  border-bottom: 1px solid black; }
+
+.matches {
+  height: 200px;
+  border: 1px solid yellow;
+  text-align: center;
+  color: white;
+  margin-top: 20px; }
+
+.matches h5 {
+  font-size: 20px;
+  border-bottom: 1px solid black; }
+
+.whole-feed {
+  width: 70%;
+  border: 1px solid black;
+  height: 800px;
+  display: flex;
+  justify-content: center; }
+
+.feed-title {
+  font-size: 30px;
+  color: white;
+  border-bottom: 1px solid black;
+  height: 60px;
+  padding-bottom: 10px; }
 
 /*# sourceMappingURL=style.css.map */
