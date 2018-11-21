@@ -11,19 +11,42 @@ const lfm = new lastfmAPI({
 
 const User = require('../../models/user-model.js');
 
-const _ = require('lodash');
-
 
 passport.use(new LastFmStrategy({
   'api_key': process.env.LASTFM_KEY,
   'secret': process.env.LASTFM_SECRET,
   'callbackURL': "http://localhost:5000/auth/lastfm/callback"
 }, function(req, sessionKey, done) {
+
   // Get the user info
   console.log(sessionKey);
   const {name, key} = sessionKey;
 
-  User.create({userName: name, email: "example@email.com", tokens: { lastfmToken: key}}, 
+  // if existing user, select user
+  User.findOne({userName: {$eq: name}})
+    .then(userDoc => {
+
+      //if no lastfm token, add one
+      if(!userDoc.token.lastfmToken) {
+        User.findByIdAndUpdate(userDoc._id, {$set: {"tokens.lastfmToken": key}})
+          .then(userDoc => {
+              return done(err, userDoc, sessionKey)
+          })
+          .catch(err => next(err));
+      }
+
+      //if already has token, just login
+      return done(err, userDoc, sessionKey);
+
+    })
+    .catch(err => (next(err)));
+
+  //if no user found, generate random email and create
+  const randomEmail = String(name.concat(Math.floor(Math.random() * 100), "@gmail.com"));
+
+  console.log(randomEmail);
+
+  User.create({userName: name, email: randomEmail, tokens: { lastfmToken: key}}, 
     function(err, user) {
     
     if (err) return done(err);
@@ -34,9 +57,4 @@ passport.use(new LastFmStrategy({
     
 
 }));
-
-
-
-
-
 
