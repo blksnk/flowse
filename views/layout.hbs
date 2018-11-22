@@ -12,34 +12,46 @@
 
 	<header>
 		<nav>
-			<div class="nav-element">
-				<a href="/" class="logo">flowse.</a>
-			</div>
-			
-			<div class="nav-element">
-				<a href="/generate">Generate</a>
-			</div>
-
-			<div class="nav-login">
-				{{#if currentUser}}
-				<a href="/logout">Logout</a>
+			<div class="nav-links">
 				
-				<a href="/account">My Account</a>
-				<a href="/feed">My feed</a>
-				{{else}}
-				<a href="/login">Login</a>
-				<a href="/signup">Signup</a>
-				{{/if}}
+				<div class="nav-element">
+					<a href="/" class="logo">flowse.</a>
 
+				</div>
+				
+				<div class="nav-element gen">
+					<a class="generate-btn" href="/generate">Generate</a>
+				</div>
+
+				<div class="nav-login nav-element">
+					
+					{{#if currentUser}}
+					<p id="dd-btn">My Account <i class="rotate fas fa-chevron-circle-down	"></i></p>
+					<div class="dropdown card">
+						<a href="/account">Settings</a>
+						<a href="/feed">Feed</a>
+						<a href="/me">Profile</a>
+						<a class="last-item" href="/logout">Logout</a>
+					</div>
+					{{else}}
+					<a class="login-btn" href="/login">Login</a>
+					<a class="login-btn" href="/signup">Signup</a>
+					{{/if}}
+
+				</div>
 			</div>
+			<div class="border-btm"></div>
 
 		</nav>
 	</header>
 
   {{{body}}}
-
-  <script src="/javascripts/script.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+	<script
+	  src="http://code.jquery.com/jquery-3.3.1.min.js"
+	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	  crossorigin="anonymous"></script>
+ 	<script src="/javascripts/script.js"></script>
 	<script src="/javascripts/feed-jv.js"></script>
 </body>
 </html>

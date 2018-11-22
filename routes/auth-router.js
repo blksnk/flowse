@@ -48,10 +48,12 @@ router.post("/process-signup", (req, res, next) => {
 	// encrypt the sumbitted password before saving
 	const password = bcrypt.hashSync(originalPassword, 10);
 
-	User.create( { fullName, email, password } )
+	User.create( { userName, email, password } )
 		.then(userDoc => {
-			req.flash("success", "account successfully created");
-			res.redirect("/")
+			req.logIn(userDoc, () => {
+				req.flash("success", "account successfully created");
+				res.redirect("/")
+			})
 		})
 		.catch(err => next(err))	
 

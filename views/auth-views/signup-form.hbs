@@ -1,10 +1,10 @@
 <h2>Sign Up.</h2>
 
 <div class="flex-center">
+{{> flash_messages}}
 	
 <div class="card">
 	
-{{> flash_messages}}
 
 <form action="/process-signup" method="POST">
 	
@@ -34,14 +34,17 @@
 
 <div class="connect-with">
 	<div class="connect sp">
+		<i class="fab fa-spotify icon"></i>
 		<a class="inner" href="/auth/spotify">Sign up with Spotify</a>
 	</div>
 
 	<div class="connect lf">
+		<i class="fab fa-lastfm icon"></i>
 		<a class="inner" href="/auth/lastfm">Sign up with Last.fm</a>
 	</div>
 
 	<div class="connect dz">
+		<img src="images/deezer-logo.svg" class="icon icon-image">
 		<a class="inner" href="/auth/deezer">Sign up with Deezer</a>
 	</div>
 </div>
