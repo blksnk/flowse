@@ -441,14 +441,28 @@ h2 {
 // FIRST SECTION
 .top-section {
 	width: 80%;
-	height: 400px;
+	height: 600px;
 	margin: 25px auto;
-	border: 1px solid black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .title h2 {
 	text-align: center;
 	padding-left: 0%;
+	margin-bottom: 25px;
+	font-size: 150px;
+	font-family: Sofia-Pro-Light;
+	font-weight: 200;
+}
+
+.title h4 {
+	text-align: center;
+	margin-bottom: 50px;
+	font-size: 30px;
+	color: white;
+	font-weight: 200;
 }
 
 .title:hover h2 {
@@ -465,6 +479,33 @@ h2 {
 	margin: 0px 30px;
 	width: 75px;
 	height: 75px;
+	border-radius: 40px;
+}
+
+.logsign {
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
+	width: 80%;
+}
+
+.logsign a {
+	width: 420px;
+	height: 80px;
+	background-color: grey;
+	color: white;
+	border-radius: 50px;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 50px;
+	font-size: 28px;
+}
+
+.logsign a:hover {
+	background-color: black;
+	transition-duration: 0.5s;
 }
 
 // SECOND SECTION
@@ -474,44 +515,65 @@ h2 {
 	display: flex;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
-	border: 1px solid black;
 }
 
 .box {
-	width: 700px;
-	height: 350px;
-	margin: 25px auto;
+	width: 1200px;
+	height: auto;
+	box-shadow: 5px 5px 20px black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.boxone {
-	background-image: url("../images/headphones-man-music-374777.jpg");
-	background-size: cover;
+.box video {
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+	top: -20px;
+	border-radius: 5px;
 }
 
-.boxsecond {
-	background-image: url("../images/abstract-art-atraction-1060901.jpg");
-	background-size: cover;
+.box .textbox {
+	position: absolute;
+	z-index: 1;
+	font-size: 30px;
+	font-weight: 200;
+	text-shadow: 3px 3px 20px grey;
 }
 
-.boxthird {
-	background-image: url("../images/backlit-bonding-casual-708392.jpg");
-	background-size: cover;
+.textbox .ttle-two {
+	margin-left: 100px;
 }
 
-.boxfourth {
-	background-image: url("../images/adult-applause-audience-952437.jpg");
-	background-size: cover;
+.textbox .ttle-three {
+	margin-left: 200px;
 }
 
-.textbox {
-	width: 250px;
-	height: 200px;
-	background-color: rgba(255, 255, 200, 0.7);
+.textbox .ttle-four {
+	margin-left: 300px;
+}
+
+
+
+//THIRD SECTION
+
+.third-section {
+	width: 80%;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-around;
+	border: 1px solid black;
+}
+
+.message-box {
+	width: 20%;
+	background-color: rgba(255, 255, 255, 0.5);
+	display: flex;
+	align-items: center;
 	border-radius: 3px;
-	box-sizing: border-box;
+	color: white;
 }
-
-
 
 
 //############################# USER PROFILE ################
@@ -591,9 +653,14 @@ h2 {
 	font-size: 15px;
 }
 
+.textbox .ttle-four {
+	margin-left: 300px;
+}
+
+//THIRD SECTION
 
 
-// ######################################################
+// #############################################################################################
 // FEED HBS PAGE 
 
 // Wrapper
