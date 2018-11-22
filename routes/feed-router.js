@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+
+
 const spotifyAPI = require('spotify-web-api-node')
 const spotify = new spotifyAPI({
 	clientId: process.env.SPOTIFY_KEY,
@@ -17,14 +19,11 @@ const History = require('../models/history-model.js');
 router.get("/feed", (req, res, next) => {
 	// Connected with for the user's part
 
-
 	const { spotifyToken, deezerToken, lastfmToken } = req.user.tokens;
-	
 	
 	res.locals.spotifyToken = spotifyToken;
 	res.locals.deezerToken = deezerToken;
 	res.locals.lastfmToken = lastfmToken;
-
 
 	// Matches
 	const userId = req.user._id;
@@ -57,23 +56,9 @@ router.get("/feed", (req, res, next) => {
 				console.log(err);
 			})	
 	})
-
-
-	// User.find(userId)
-
-
-	// .then(results => {
-	// 	console.log(results);
-	// 	const spotify = req.user.tokens.spotifyToken;
-	// 	spotify.setAccessToken(spotify);
-	// 	spotify.getMyTopTracks();
-
-
-	// })
-	// .catch(err => next(err))
-
-
 });
+
+
 
 router.get("/profile/:userId", (req, res, next) => {
 	const { userId } = req.params;
@@ -86,6 +71,7 @@ router.get("/profile/:userId", (req, res, next) => {
 	})
 	.catch(err => next(err));
 })
+
 
 
 module.exports = router;

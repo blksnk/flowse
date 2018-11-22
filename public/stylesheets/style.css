@@ -555,6 +555,13 @@ h2 {
   font-size: 20px;
   border-bottom: 1px solid black; }
 
+.user-info a {
+  text-decoration: none;
+  color: white; }
+
+.user-info img {
+  width: 20px; }
+
 .matches {
   width: 100%;
   height: 70%;
@@ -569,6 +576,10 @@ h2 {
 
 .matches p {
   margin: 35px auto; }
+
+.matches a {
+  text-decoration: none;
+  color: white; }
 
 .right-bar-wrapper {
   width: 70%;

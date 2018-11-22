@@ -9,6 +9,13 @@ let serviceButton = document.querySelector(".services > .connect-with")
 let titles = document.querySelector("body > h2");
 let recent = document.querySelector(".section-title > h2")
 
+// let textBox = document.querySelector(".textbox")
+TweenLite.fromTo(".ttle-one", 1, {x: -30, opacity: 0}, {x: 0, opacity: 1}).delay(3);
+TweenLite.fromTo(".ttle-two", 1, {x: -30, opacity: 0}, {x: 0, opacity: 1}).delay(3.5);
+TweenLite.fromTo(".ttle-three", 1, {x: -30, opacity: 0}, {x: 0, opacity: 1}).delay(4);
+TweenLite.fromTo(".ttle-four", 1, {x: -30, opacity: 0}, {x: 0, opacity: 1}).delay(4.5);
+
+
 // DROPDOWN
 
 var isRotated = false;
@@ -26,7 +33,6 @@ dropBtn.onclick = function (event) {
 		isRotated = false;
 	}
 
-
 }
 
 // RESULTS
@@ -43,6 +49,7 @@ TweenLite.fromTo(accountCards, 0.8, {y: 1000, scale: 0.8, opacity: 0.8}, {y: 0, 
 TweenLite.fromTo(accountButtons, 0.8, {y: 700, scale: 0.8, opacity: 0}, {y: -200 , opacity: 0, scale: 1});
 TweenLite.fromTo(accountButtons, 0.6, {y: -200, scale: 0.8, opacity: 0.5}, {y: 0 , opacity: 1, scale: 1}).delay(0.8);
 }
+
 
 // SERVICES
 
@@ -64,3 +71,6 @@ TweenLite.fromTo(titles, 1.3, {x: -1600, opacity: 0.8}, {x: 0, opacity: 1}).dela
 
 TweenLite.fromTo(".user-tracks", 0.8, {y: 800, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1}).delay(1.2);
 TweenLite.fromTo(recent, 1, {x: -1100, opacity: 0.8}, {x: 0, opacity: 1}).delay(1.8);
+
+// HOME PAGE
+
