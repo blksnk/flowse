@@ -34,6 +34,7 @@ router.get("/signup", (req, res, next) => {
 	res.render("auth-views/signup-form.hbs");
 });
 
+
 router.post("/process-signup", (req, res, next) => {
 	const { userName, email, originalPassword } = req.body;
 
@@ -48,7 +49,7 @@ router.post("/process-signup", (req, res, next) => {
 	// encrypt the sumbitted password before saving
 	const password = bcrypt.hashSync(originalPassword, 10);
 
-	User.create( { fullName, email, password } )
+	User.create( { userName, email, password } )
 		.then(userDoc => {
 			req.flash("success", "account successfully created");
 			res.redirect("/")
@@ -95,7 +96,7 @@ function getRecent (user, req, res) {
 
 router.post("/auth/default", (req, res, next) => {
 	const { email, originalPassword } = req.body;
-
+console.log("1")
 	// search the db for a user with that email
 	User.findOne( { email: { $eq: email } } )
 		.then(userDoc => {
@@ -104,6 +105,10 @@ router.post("/auth/default", (req, res, next) => {
 				req.flash("error", "Incorrect email. ");
 				res.redirect("/login");
 				return;
+			} else {
+				req.logIn(userDoc, () => {
+					res.redirect("/account")
+				});
 			}
 			// check the password
 			const { password } = userDoc;

@@ -14,19 +14,60 @@ const History = require('../models/history-model.js');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 router.get("/feed", (req, res, next) => {
-  res.render('feed.hbs');
+	// Connected with for the user's part
+
+
+	const { spotifyToken, deezerToken, lastfmToken } = req.user.tokens;
+	
+	
+	res.locals.spotifyToken = spotifyToken;
+	res.locals.deezerToken = deezerToken;
+	res.locals.lastfmToken = lastfmToken;
+
+
+	// Matches
+	const userId = req.user._id;
+
+	// Find me in the database 
+	History.find({userId: {$eq: userId}})
+	.then(userHistory => {
+		// Retrieve the array of all the tracks that I listened to
+		const { spotify } = userHistory[0];
+		// For each song, find the ones that matches other users listenings (and NOT mines)
+		Promise.all(
+		spotify.map(oneSong => {
+			return History.find(
+				{
+					$and: [{ spotify: {$elemMatch:  {name: oneSong.name}}}, {userId : {$ne : userId}}]
+				},
+				{ userId: 1, "spotify.$": 1 }
+				).populate("userId")
+			})
+			)
+			.then(matches => {
+				let myMatches = matches.filter(results => results.length);
+				// console.log("this is my matches------------------------",songInCommon);
+				// Send the array to the HBS
+				res.locals.match = myMatches[0];
+				res.render('feed.hbs');
+			})
+			.catch(err => {
+				console.log(err);
+			})	
+	})
+
+
+	User.find(userId)
+	
+	.then(results => {
+		// console.log(results);
+		spotify.setAccessToken(user.tokens.spotifyToken);
+		
+	})
+	.catch(err => next(err))
+
+
 });
 
 

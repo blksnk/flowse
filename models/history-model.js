@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const User = require('./user-model.js');
 
 const historySchema = new Schema({
-	userId: {type: Schema.Types.ObjectId, required: true},
+	userId: {type: Schema.Types.ObjectId, ref: "User", required: true},
 	spotify: [ Object ],
 	lastfm: [ Object ],
 	deezer: [ Object ],
