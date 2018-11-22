@@ -797,43 +797,52 @@ h2 {
 
 .left-bar {
 	width: 30%;
-	border: 1px solid black;
 	height: 800px;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 }
 
-.user-info {
-	width: 100%;
-	height: 30%;
-	border: 1px solid yellow;
-	text-align: center;
+.user-info-fake {
+	width: 700px;
+	
 	color: white;
+	display: flex;
+	flex-direction: column;
+
+	ul {
+		display: flex;
+		justify-content: space-evenly;
+		li {
+			list-style-type: none;
+		}
+	}
 }
 
-.user-info h5 {
-	font-size: 20px;
-	border-bottom: 1px solid black;
-}
 
-.user-info a {
+.user-info-fake a {
 	text-decoration: none;
 	color: white;
 }
 
-.user-info img {
+.user-info-fake img {
 	width: 20px;
 }
 
-
 .matches {
-	width: 100%;
-	height: 70%;
-	border: 1px solid yellow;
-	text-align: center;
+	width: 600px;
 	color: white;
 	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+
+	.match-list {
+		margin-top: 30px;
+		
+		.one-match {
+			line-height: 10px;
+		}
+	}
 }
 
 .matches h5 {
@@ -845,9 +854,9 @@ h2 {
 	margin: 35px auto;
 }
 
-.matches a {
+.feed a {
 	text-decoration: none;
-	color: white;
+	color: #3AE8AB;
 }
 
 
@@ -855,7 +864,6 @@ h2 {
 
 .right-bar-wrapper {
 	width: 70%;
-	border: 1px solid black;
 	height: 800px;
 	display: flex;
 	justify-content: center;
@@ -866,7 +874,6 @@ h2 {
 	width: 100%;
 	font-size: 30px;
 	color: white;
-	border: 1px solid yellow;
 	height: 60%;
 	padding-bottom: 10px;
 	display: flex;
@@ -876,7 +883,6 @@ h2 {
 
 .listened-track {
 	width: 100%;
-	border: 1px solid yellow;
 	height: 40%;
 	color: white;
 	display: flex;

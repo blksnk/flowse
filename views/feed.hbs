@@ -1,53 +1,58 @@
-  <h2>Your dashboard</h2>
+  <h2>Your dashboard.</h2>
 
-<section class="wrapper-feed">
+<section class="flex-center feed">
 
   <section class="left-bar">
-    <div class="user-info">
-      <h5>{{currentUser.userName}}</h5>
-      <p>Services
-        {{#if spotifyToken}}
-          <p>Spotify</p>
-          {{else}}
-          <a href="/account/services">Connect with Spotify</a>
-        {{/if}}
+    <div class="user-info-fake card">
+      <h2>Connected Services:</h2>
 
-        {{#if deezerToken}}
-          <p>Deezer</p> 
-               {{else}}
-          <a href="/account/services">Connect with Deezer</a>
-        {{/if}}
+		{{#if currentUser.tokens}}
+		<ul>
+			<li>
+			{{#if currentUser.tokens.spotifyToken}}
+				<h4>Spotify</h4>
+      {{else}}
+        <h4>Link your <a href="/auth/spotify">Spotify</a></h4>
+			{{/if}}
+			</li>
 
-        {{#if lastfmToken}}
-          <p>LastFM</p> 
-               {{else}}
-          <a href="/account/services">Connect with LastFM</a>
-        {{/if}}
-      </p>
+			<li>
+			{{#if currentUser.tokens.deezerToken}}
+				<h4>Deezer</h4>
+      {{else}}
+        <h4>Link your <a href="/auth/deezer">Deezer</a></h4>
+			{{/if}}
+			</li>
+
+			<li>
+			{{#if currentUser.tokens.spotifyToken}}
+				<h4>Last.fm</h4>
+      {{else}}
+        <h4>Link your <a href="/auth/lastfm">Last.fm</a></h4>
+			{{/if}}
+			</li>
+		</ul>
+		{{else}}
+			<h4>No service connected yet.</h4>
+		{{/if}}
     </div>
 
 
-    <div class="matches">
-      <h5>Matches of the day</h5>
-      {{#each match}}
-    
-        You matched with  <a href="/profile/{{this.userId._id}}"><b>{{this.userId.userName}}</b></a>, on the song {{this.spotify.[0].name}} by {{this.spotify.[0].artist}}</p>
-      {{/each}}
+    <div class="matches card">
+      <h2>Matches of the day</h2>
+
+      <div class="match-list">
+
+        {{#each match}}
+          <div class="one-match">
+            You matched with  <a href="/profile/{{this.userId._id}}"><b>{{this.userId.userName}}</b></a>, on the song {{this.spotify.[0].name}} by {{this.spotify.[0].artist}}</p>
+
+          </div>
+        {{/each}}
+      </div>
     </div>
   </section>
 
 
 
-  <section class="right-bar-wrapper">
-    <div class="concerts">
-      <h5>Concerts</h5>
-
-    </div>
-
-    <div class="listened-track">
-      <h5>Most listened track</h5>
-
-
-    </div>
-  </section>
 </section>

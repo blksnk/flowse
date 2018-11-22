@@ -122,8 +122,8 @@ router.get("/generate", (req, res, next) => {
 											},
 											function done (err, data) {
 												if(err) next (err);
-
 												const result = data.data;
+												console.log(result);
 												let trackList = [];
 												let counter = 0;
 

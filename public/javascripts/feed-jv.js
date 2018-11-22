@@ -7,7 +7,10 @@ let serviceCard = document.querySelector(".services > .card")
 let serviceButton = document.querySelector(".services > .connect-with")
 
 let titles = document.querySelector("body > h2");
-let recent = document.querySelector(".section-title > h2")
+let recent = document.querySelector(".section-title > h2");
+
+let userProfileInfo = document.querySelector(".user-info-profile");
+let userFake = document.querySelector('.user-info-fake');
 
 // let textBox = document.querySelector(".textbox")
 TweenLite.fromTo(".ttle-one", 1, {x: -30, opacity: 0}, {x: 0, opacity: 1}).delay(3);
@@ -63,14 +66,26 @@ TweenLite.fromTo(serviceButton, 0.6, {y: -200, scale: 0.8, opacity: 0.5}, {y: 0 
 
 // PROFILE
 
-TweenLite.fromTo(".user-info-profile", 0.8, {y: 1500, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1});
-TweenLite.fromTo(".user-services", 0.8, {y: 1500, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1}).delay(0.1);
-TweenLite.fromTo(titles, 1.3, {x: -1600, opacity: 0.8}, {x: 0, opacity: 1}).delay(0.6);
+if(userProfileInfo) {
+	
+	TweenLite.fromTo(userProfileInfo, 0.8, {y: 1500, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1});
+	TweenLite.fromTo(".user-services", 0.8, {y: 1500, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1}).delay(0.1);
+	TweenLite.fromTo(titles, 1.3, {x: -1600, opacity: 0.8}, {x: 0, opacity: 1}).delay(0.6);
+	
+}
 
+if(recent) {
+	TweenLite.fromTo(".user-tracks", 0.8, {y: 800, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1}).delay(1.2);
+	TweenLite.fromTo(recent, 1, {x: -1100, opacity: 0.8}, {x: 0, opacity: 1}).delay(1.8);
+}
 
+if(userFake) {
 
-TweenLite.fromTo(".user-tracks", 0.8, {y: 800, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1}).delay(1.2);
-TweenLite.fromTo(recent, 1, {x: -1100, opacity: 0.8}, {x: 0, opacity: 1}).delay(1.8);
+	
+	TweenLite.fromTo(userFake, 0.8, {y: 1500, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1});
+	TweenLite.fromTo(".matches", 0.8, {y: 1500, scale: 0.8, opacity: 0.8}, {y: 0, scale: 1, opacity: 1}).delay(0.1);
+	TweenLite.fromTo(titles, 1.3, {x: -1600, opacity: 0.8}, {x: 0, opacity: 1}).delay(0.6);
+	
+}
 
-// HOME PAGE
 
