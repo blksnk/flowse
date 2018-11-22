@@ -48,6 +48,10 @@ h2 {
   margin: 0px 0 20px 0;
   padding-left: 10%; }
 
+.error-message, .success-message {
+  font-size: 20px;
+  color: white; }
+
 .card {
   display: flex;
   justify-content: center;
@@ -86,6 +90,14 @@ h2 {
         border-radius: 30px;
         background-color: #2E2E2E;
         color: white; }
+      .card form label textarea {
+        padding: 10px;
+        border: none;
+        color: white;
+        border-radius: 20px;
+        background-color: #2E2E2E; }
+      .card form label label:has(textarea) {
+        align-self: flex-start; }
     .card form .button-right {
       display: flex;
       justify-content: flex-end;
@@ -97,7 +109,9 @@ h2 {
         align-items: center;
         width: 200Px;
         transition-duration: 0.5s ease-in-out;
-        height: 30px; }
+        height: 30px;
+        font-size: 13.3px;
+        font-family: 'Euclid-Light'; }
         .card form .button-right .button-anim button {
           font-family: 'Euclid-Light';
           border: none;
@@ -124,6 +138,9 @@ h2 {
 .dz {
   background-color: #2692B7; }
 
+.icon-image {
+  height: 18px; }
+
 .connect {
   width: 40px;
   height: 40px;
@@ -137,21 +154,21 @@ h2 {
     color: transparent;
     text-decoration: none;
     transition-delay: 0;
-    transition-duration: 0.1s; }
+    transition-duration: 0.05s; }
   .connect .icon {
     position: relative;
-    left: 25px;
+    left: 27px;
     color: #2E2E2E;
     text-align: center;
     z-index: 100;
-    transition-duration: 0.2s; }
+    transition-duration: 0.1s; }
 
 .connect:hover {
   width: 180px; }
 
 .connect:hover .inner {
   color: white;
-  transition-delay: 0.2s;
+  transition-delay: 0.3s;
   transition-duration: 0.3s; }
 
 .connect:hover .icon {
@@ -211,18 +228,34 @@ h2 {
 .account .cancel:hover {
   width: 120px; }
 
+.account .connect-with .icon {
+  left: 50px; }
+
 .account .connect-with .info {
   background-color: transparent;
   border: 1px solid white; }
+  .account .connect-with .info .icon {
+    color: white;
+    left: 38px; }
 
 .account .connect-with .serv {
   background-image: linear-gradient(to right, #8EF3B1, #81C8DF, #D68F8F, #E6996F); }
 
+.account .connect-with .serv:hover a {
+  color: #2E2E2E; }
+
 .account .connect-with .cancel {
   background-color: #3AE8AB; }
+  .account .connect-with .cancel .icon {
+    left: 28px; }
 
 .account .connect-with .delete {
   background-color: #F03D3D; }
+  .account .connect-with .delete .icon {
+    left: 30px; }
+
+.account .connect-with .perm .icon {
+  left: 44px; }
 
 .services .modify {
   width: 280px; }
@@ -236,9 +269,13 @@ h2 {
       width: 180px; }
       .services .modify .one-service .service-modify .add {
         background-color: #1DB954; }
+        .services .modify .one-service .service-modify .add .icon {
+          left: 15px; }
       .services .modify .one-service .service-modify .remove {
         background-color: #E83A3A; }
-      .services .modify .one-service .service-modify head .add:hover {
+        .services .modify .one-service .service-modify .remove .icon {
+          left: 28px; }
+      .services .modify .one-service .service-modify .add:hover {
         width: 70px; }
       .services .modify .one-service .service-modify .remove:hover {
         width: 100px; }

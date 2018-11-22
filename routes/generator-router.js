@@ -72,7 +72,7 @@ router.get("/generate", (req, res, next) => {
 						//use new token
 	            		spotify.setAccessToken(newToken);
 
-	            		spotify.getMyTopArtists({limit: 20})
+	            		spotify.getMyTopArtists({limit: 20, offset: Math.floor(Math.random()*5),})
 							.then(artistDoc => {
 								const topArtists = artistDoc.body.items;
 
@@ -112,27 +112,55 @@ router.get("/generate", (req, res, next) => {
 										
 										//####################################### DEEZER ###########################
 										if (deezerToken) {
-											console.log(deezerToken);
 											deezer.request(deezerToken, {
-												resource: 'search/track',
+												resource: 'user/me/history',
 												method: 'GET',
 												fields: {
-													q: genreList, 
-													limit: 5
+													limit: 5,
+													offset: 0,
 												},
-
 											},
-											function done (err, result) {
-												if(err) next(err);
+											function done (err, data) {
+												if(err) next (err);
 
-												console.log(result);
-												res.locals.deezerResults = result.data;
+												const result = data.data;
+												let trackList = [];
+												let counter = 0;
+
 												// res.send(result);
-												res.render('generator-views/result.hbs');
-											}
-										)}
+
+												result.forEach(oneResult => {
+													const artistId = oneResult.artist.id;
+
+
+
+													deezer.request(deezerToken, {
+														resource: `artist/${artistId}/top`,
+														method: 'GET',
+														fields: {
+															limit: 5,
+															
+														},
+													}, 
+													function done (err, result) {
+														console.log(result.data)
+														trackList.push(result.data[Math.floor(Math.random()*5)]);
+														res.locals.deezerResults = trackList;
+														counter++;
+
+														if (counter === 5) {
+															res.locals.deezerResults = trackList;
+															res.render('generator-views/result.hbs');
+															console.log(Math.floor(Math.random()*5))
+															// res.send(trackList);
+														}
+														console.log('counter: ', counter);
+													});
+												})
+											})}
 										else {
 											res.render('generator-views/result.hbs');
+											return;
 										}
 
 									})
@@ -148,6 +176,86 @@ router.get("/generate", (req, res, next) => {
 			next(err)
 		});
 	}
+
+	else if(deezerToken) {
+		deezer.request(deezerToken, {
+			resource: 'user/me/history',
+			method: 'GET',
+			fields: {
+				limit: 5,
+				offset: 0,
+			},
+		},
+		function done (err, data) {
+			if(err) next (err);
+
+			const result = data.data;
+			let trackList = [];
+			let counter = 0;
+
+			// res.send(result);
+
+			result.forEach(oneResult => {
+				const artistId = oneResult.artist.id;
+
+
+
+				deezer.request(deezerToken, {
+					resource: `artist/${artistId}/top`,
+					method: 'GET',
+					fields: {
+						limit: 5,
+						
+					},
+				}, 
+				function done (err, result) {
+					console.log(result.data)
+					trackList.push(result.data[Math.floor(Math.random()*5)]);
+					res.locals.deezerResults = trackList;
+					counter++;
+
+					if (counter === 5) {
+						res.locals.deezerResults = trackList;
+						res.render('generator-views/result.hbs');
+						console.log(Math.floor(Math.random()*5))
+						// res.send(trackList);
+					}
+					console.log('counter: ', counter);
+				});
+			})
+
+			
+			
+			
+			
+			
+			
+		})
+
+
+
+		// deezer.request(deezerToken, {
+		// 	resource: 'search/track',
+		// 	method: 'GET',
+		// 	fields: {
+		// 		q: genreList, 
+		// 		limit: 5
+		// 	},
+
+		// },
+		// function done (err, result) {
+		// 	if(err) next(err);
+
+		// 	console.log(result);
+		// 	res.locals.deezerResults = result.data;
+		// 	// res.send(result);
+		// 	res.render('generator-views/result.hbs');
+		// 	return;
+											
+		// })
+
+	}
+
 
 });
 

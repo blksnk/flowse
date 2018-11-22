@@ -46,6 +46,8 @@ nav {
 	justify-content: space-between;
 	align-items: center;
 	height: 60px;
+	
+
 	.logo {
 		font-family: 'Sofia-Pro-Light';
 		font-size: 40px;
@@ -61,6 +63,11 @@ h2 {
 	font-size: 120px;
 	margin: 0px 0 20px 0;
 	padding-left: 10%;
+}
+
+.error-message, .success-message {
+	font-size: 20px;
+	color:white;
 }
 
 .card {
@@ -106,8 +113,19 @@ h2 {
 				border: none;
 				border-radius: 30px;
 				background-color: #2E2E2E;
-
 				color: white;
+			}
+
+			textarea {
+				padding: 10px;
+				border: none;
+				color: white;
+				border-radius: 20px;
+				background-color: #2E2E2E;
+			}
+
+			label:has(textarea) {
+				align-self: flex-start;
 			}
 		}
 
@@ -126,6 +144,8 @@ h2 {
 				width: 200Px;
 				transition-duration: 0.5s ease-in-out;
 				height: 30px;
+				font-size: 13.3px;
+				font-family: 'Euclid-Light';
 
 				button {
 					font-family: 'Euclid-Light';
@@ -166,6 +186,11 @@ h2 {
 	background-color: #2692B7;
 }
 
+.icon-image {
+	height: 18px;
+
+}
+
 .connect {
 	width: 40px;
 	height: 40px;
@@ -182,17 +207,18 @@ h2 {
 		color: transparent;
 		text-decoration: none;
 		transition-delay: 0;
-		transition-duration: 0.1s;
+		transition-duration: 0.05s;
 
 	}
 
 	.icon {
 		position: relative;
-		left: 25px;
+		left: 27px;
+
 		color: #2E2E2E;
 		text-align: center;
 		z-index: 100;
-		transition-duration: 0.2s
+		transition-duration: 0.1s
 	}
 }
 
@@ -203,7 +229,7 @@ h2 {
 .connect:hover .inner {
 	
 	color: white;
-	transition-delay: 0.2s;
+	transition-delay: 0.3s;
 	transition-duration: 0.3s;
 }
 
@@ -313,25 +339,50 @@ h2 {
 //###################### BOTTOM BUTTONS ###################
 	.connect-with {
 
-
+		.icon {
+				left: 50px;
+			}
 
 		.info {
 			
 			background-color: transparent;
 			border: 1px solid white;
+
+			.icon {
+				color: white;
+				left: 38px;
+			}
 		}
 
 		.serv {
-			background-image: linear-gradient(to right, #8EF3B1, #81C8DF, #D68F8F, #E6996F)
+			background-image: linear-gradient(to right, #8EF3B1, #81C8DF, #D68F8F, #E6996F);
+			
+
+
 		}
+
+		.serv:hover a {
+				color: #2E2E2E;
+			}
 
 		.cancel {
 			background-color: #3AE8AB;
-
+		
+			.icon {
+				left: 28px;
+			}
 		}
 
 		.delete {
 			background-color: #F03D3D;
+
+			.icon {
+				left: 30px;
+			}
+		}
+
+		.perm .icon {
+			left: 44px;
 		}
 	}
 
@@ -358,13 +409,21 @@ h2 {
 
 				.add {
 					background-color: #1DB954;
+
+					.icon {
+						left: 15px;
+					}
 				}
 
 				.remove {
 					background-color: #E83A3A;
+
+					.icon {
+						left: 28px;
+					}
 				}
 
-			head	.add:hover {
+			.add:hover {
 					width: 70px;
 				}
 

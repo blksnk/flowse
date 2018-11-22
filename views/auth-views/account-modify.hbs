@@ -5,7 +5,7 @@
 		{{>flash_messages}}
 
 
-		<form action="/account/modify/process-changes" method="POST">
+		<form action="/account/modify/process-changes" id="login-form" method="POST">
 			<label>
 				Username: 
 				<input type="text" name="userName" value="{{currentUser.userName}}"  required="true">
@@ -18,12 +18,17 @@
 
 			<label>
 				Current password: 
-				<input type="password" name="orginalPassword" required="true">
+				<input type="password" name="originalPassword" required="true">
 			</label>
 
 			<label>
 				New password: 
 				<input type="password" name="newPassword">
+			</label>
+
+			<label>
+				About me:
+				<textarea type="text" form="login-form" name="description" value="{{currentUser.description}}" rows="10" cols="27"></textarea>
 			</label>
 
 			<div class="button-right">
@@ -37,9 +42,11 @@
 
 	<div class="connect-with">
 		<div class="connect cancel">
+			<i class="fas fa-undo icon"></i>
 			<a class="inner" href="/account">Cancel</a>
 		</div>
 		<div class="connect delete">
+			<i class="fas fa-trash-alt icon"></i>
 			<a class="inner" href="/account/modify/confirm-delete">Delete account</a>
 		</div>
 	</div>

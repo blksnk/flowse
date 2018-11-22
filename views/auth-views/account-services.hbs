@@ -2,9 +2,9 @@
 
 <div class="flex-center services">
 
-	{{flash_messages}}
+			{{>flash_messages}}
+
 	<div class="card modify">
-		
 		<ul>
 			<li class="one-service">
 				<div class="service-name">
@@ -14,10 +14,12 @@
 
 					{{#if currentUser.tokens.spotifyToken}}
 					<div class="connect remove sp">
+						<i class="fas fa-minus icon"></i>
 						<a class="inner" href="/account/services/rm/spotify">Remove</a>
 					</div>
 					{{else}}
 					<div class="connect add sp">
+						<i class="fas fa-plus icon"></i>
 						<a class="inner" href="/account/services/add/spotify">Add</a>
 					</div>	
 					{{/if}}
@@ -31,10 +33,12 @@
 				<div class="service-modify connect-with">
 					{{#if currentUser.tokens.deezerToken}}
 					<div class="connect remove dz">
+						<i class="fas fa-minus icon"></i>
 						<a class="inner" href="/account/services/rm/deezer">Remove</a>
 					</div>
 					{{else}}
 					<div class="connect add dz">
+						<i class="fas fa-plus icon"></i>
 						<a class="inner" href="/account/services/add/deezer">Add</a>
 					</div>
 					{{/if}}
@@ -48,10 +52,12 @@
 				<div class="service-modify connect-with">
 					{{#if currentUser.tokens.lastfmToken}}
 					<div class="connect remove lf">
+						<i class="fas fa-minus icon"></i>
 						<a class="inner" href="/account/services/rm/lastfm">Remove</a>
 					</div>
 					{{else}}
 					<div class="connect add lf">
+						<i class="fas fa-plus icon"></i>	
 						<a class="inner" href="/account/services/add/lastfm">Add</a>
 					</div>
 					{{/if}}
@@ -59,4 +65,6 @@
 			</li>
 		</ul>
 	</div>
+
+	
 </div>
