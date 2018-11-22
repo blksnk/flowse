@@ -9,7 +9,7 @@ const History = require('../models/history-model.js')
 
 const bcrypt = require('bcrypt');
 
-//redirect uri for account linking
+// apis for account linking
 const spotifyAPI = require('spotify-web-api-node');
 const spotify = new spotifyAPI({
   clientId: process.env.SPOTIFY_KEY,
@@ -23,6 +23,12 @@ const deezer = new deezerAPI({
     clientSecret: process.env.DEEZER_SECRET,
     redirectURL: "http://localhost:5000/generate/result",
 });
+
+const lastfmAPI = require('lastfmapi');
+const lfm = new lastfmAPI({
+  'api_key': process.env.LASTFM_KEY,
+  'secret': process.env.LASTFM_SECRET,
+})
 
 router.get("/signup", (req, res, next) => {
 	res.render("auth-views/signup-form.hbs");
@@ -56,10 +62,13 @@ function refreshSpotify (userDoc) {
 	spotify.setRefreshToken(userDoc.tokens.spotifyRefresh);
 	spotify.refreshAccessToken()
         .then(data => {
+        	console.log("refreshed token, extracting data...")
         	const oldToken = userDoc.tokens.spotifyToken;
         	const newToken = data.body['access_token'];
           
-        	spotifyApi.setAccessToken(newToken);
+        	spotify.setAccessToken(newToken);
+
+        	console.log("using new token, updating db")
           
         	User.findByIdAndUpdate(userDoc._id, {$set: {"tokens.spotifyToken": newToken}})
         		.then(userDoc => {
@@ -69,9 +78,9 @@ function refreshSpotify (userDoc) {
 						res.redirect("/");
 					});
      			 })
-        		.catch(err => next(err));
+        		.catch(err => console.log(err));
 		})
-        .catch(err => next(err));
+        .catch(err => console.log(err));
 }
 
 function getRecent (user, req, res) {
@@ -105,8 +114,30 @@ router.post("/auth/default", (req, res, next) => {
 				res.redirect("/login");
 			}
 			else {
-				if (req.user.tokens.spotifyToken) {
-				refreshSpotify(userDoc)
+				if (userDoc.tokens.spotifyToken) {
+					spotify.setAccessToken(userDoc.tokens.spotifyToken);
+					spotify.setRefreshToken(userDoc.tokens.spotifyRefresh);
+					spotify.refreshAccessToken()
+				        .then(data => {
+				        	console.log("refreshed token, extracting data...")
+				        	const oldToken = userDoc.tokens.spotifyToken;
+				        	const newToken = data.body['access_token'];
+				          
+				        	spotify.setAccessToken(newToken);
+
+				        	console.log("using new token, updating db")
+				          
+				        	User.findByIdAndUpdate(userDoc._id, {$set: {"tokens.spotifyToken": newToken}})
+				        		.then(userDoc => {
+				            		console.log("TOKEN REFRESH, new token: ", newToken, "\n old token: ", oldToken);
+				            		req.logIn(userDoc, () => {
+										req.flash("success", "Login successfull")
+										res.redirect("/");
+									});
+				     			 })
+				        		.catch(err => console.log(err));
+						})
+				        .catch(err => console.log(err));
 					
 				}
 				//refresh SPOTIFY token on login...
@@ -161,53 +192,129 @@ router.get('/auth/spotify/callback',
 
 			console.log("USER ID -------------", req.user._id )
 
-			if (!req.user.password) {
-				req.flash("success", "log in successful, please input your password")
-			    res.redirect("/account/modify");
-			}
-			else {
-				req.flash("success", "log in successfull");
-
-				res.redirect("/");
-			}
-
 			//store users recently played tracks on login
-			History.create({userId: req.user._id})
-				.then(historyDoc => {
-					console.log(historyDoc)
-					
-					console.log('history doc created, fetching data...')
-					spotify.setAccessToken(req.user.tokens.spotifyToken);
-					spotify.getMySavedTracks({limit: 16, offset: 0})
-						.then(data => {
-							const result = data.body.items;
 
-							result.forEach(oneResult => {
-								const name = oneResult.track.name;
-								const artist = oneResult.track.artists[0].name;
-								const url = oneResult.track.external_urls.spotify;
-								const track = {
-									name: name,
-									artist: artist,
-									url: url
-								}
+			//check is history already exists
+			History.findOne({userId: req.user._id})
+				.then(historyDoc => {
+					if(historyDoc) {
+						spotify.setAccessToken(req.user.tokens.spotifyToken);
+						spotify.getMySavedTracks({limit: 16, offset: 0})
+							.then(data => {
+								const result = data.body.items;
+								const trackList = [];
+								let counter = 0;
+
+								result.forEach(oneResult => {
+									const name = oneResult.track.name;
+									const artist = oneResult.track.artists[0].name;
+									const url = oneResult.track.external_urls.spotify;
+
+									counter++;
+
+									const track = {
+										name: name,
+										artist: artist,
+										url: url
+									}
+
+									trackList.push(track);
+
+									if (counter === 16) {
+										History.findByIdAndUpdate(historyDoc._id, {$set: {spotify: trackList}})
+										.then(historyDoc => {
+												if (!req.user.password) {
+													req.flash("success", "log in successful, please input your password")
+												    return res.redirect("/account/modify");
+												}
+												else {
+													req.flash("success", "log in successfull");
+
+													return res.redirect("/");
+												}
+										})
+										.catch(err => console.log(err))
+									}
+									
+									
+								})	
+							})
+							.catch(err => console.log(err))
+					}
+					else {
+						//if no history, create new one
+						History.create({userId: req.user._id})
+							.then(historyDoc => {
+								console.log(historyDoc)
 								
-								History.findByIdAndUpdate(historyDoc._id, {$push: {spotify: track}})
-									.then(historyDoc => {
-										console.log('pushed : ', track);	
+								console.log('history doc created, fetching data...')
+								spotify.setAccessToken(req.user.tokens.spotifyToken);
+								spotify.getMySavedTracks({limit: 16, offset: 0})
+									.then(data => {
+										const result = data.body.items;
+										const trackList = [];
+										let counter = 0;
+
+										result.forEach(oneResult => {
+												const name = oneResult.track.name;
+												const artist = oneResult.track.artists[0].name;
+												const url = oneResult.track.external_urls.spotify;
+
+												counter++;
+
+												const track = {
+													name: name,
+													artist: artist,
+													url: url
+												}
+
+												trackList.push(track);
+
+												if (counter === 16) {
+													History.findByIdAndUpdate(historyDoc._id, {$set: {spotify: trackList}})
+													.then(historyDoc => {
+															if (!req.user.password) {
+																req.flash("success", "log in successful, please input your password")
+															    return res.redirect("/account/modify");
+															}
+															else {
+																req.flash("success", "log in successfull");
+
+																return res.redirect("/");
+															}
+													})
+													.catch(err => console.log(err))
+												}
+												
+												
+											})	
 									})
 									.catch(err => console.log(err))
-							})	
-						})
-						.catch(err => console.log(err))
+							})
+							.catch(err => console.log(err));
+					}
 				})
-				.catch(err => console.log(err));
+
+			
 	}
 );
 
 
-//######################## LASTFM ######################
+//#################################### LASTFM #######################################
 router.get('/auth/lastfm', passport.authenticate('lastfm'));
+
+router.get('/auth/lastfm/link', (req, res, next) => {
+	// res.send(req.query);
+
+	const {token} = req.query;
+	User.findByIdAndUpdate(req.user._id, {$set: {"tokens.lastfmToken": token}})
+	 	.then(userDoc => {
+ 			req.flash('success', 'Deezer account link successful');
+ 			res.redirect('/account/services')
+ 		})
+ 		.catch(err => next(err))
+
+})
 
 router.get('/auth/lastfm/callback', function(req, res, next){
   passport.authenticate('lastfm', {failureRedirect:'/login'}, 
@@ -231,6 +338,27 @@ router.get('/auth/lastfm/callback', function(req, res, next){
 
 
 //################################ DEEZER ################################
+
+router.get('/auth/deezer/link', (req, res, next) => {
+
+	const code = req.query.code;
+
+	deezer.createSession(process.env.DEEZER_KEY_2, process.env.DEEZER_SECRET_2, code,
+	 function (err, result) {
+	 	if (err) next(err);
+
+	 	// res.send({token: result.accessToken})
+
+	 	User.findByIdAndUpdate(req.user._id, {$set: {"tokens.deezerToken": result.accessToken}})
+	 		.then(userDoc => {
+	 			req.flash('success', 'Deezer account link successful');
+	 			res.redirect('/account/services')
+	 		})
+	 		.catch(err => next(err))
+	 })
+	
+})
+
 
 router.get('/auth/deezer', 
 	passport.authenticate("deezer", {
@@ -330,7 +458,7 @@ router.get('/account/modify', (req, res, next) => {
 
 
 router.post('/account/modify/process-changes', (req, res, next) => {
-	const {userName, email, originalPassword, newPassword } = req.body;
+	const {userName, email, originalPassword, newPassword, description } = req.body;
 	const userEmail = req.user.email;
 
 	if(!req.user) {
@@ -338,11 +466,10 @@ router.post('/account/modify/process-changes', (req, res, next) => {
 		res.redirect('/login');
 		return;
 	}
-	console.log("user: ", req.user);
+
 	//find user in DB
 	User.findOne({email: userEmail  } )
 		.then(userDoc => {
-
 
 			// if user has no password, skip passwodr verif process
 			if(!req.user.password) {
@@ -359,6 +486,7 @@ router.post('/account/modify/process-changes', (req, res, next) => {
 			}
 
 			//check if original password is false
+		
 			if(!bcrypt.compareSync(originalPassword, userDoc.password)) {
 				req.flash('error', 'Incorrect password');
 				res.redirect('/account');
@@ -369,8 +497,9 @@ router.post('/account/modify/process-changes', (req, res, next) => {
 				//encrypt new password
 				const newPwd = bcrypt.hashSync(newPassword, 10);
 
-				User.findByIdAndUpdate(userDoc._id, {$set: {userName: userName, email: email, password: newPwd} } )
+				User.findByIdAndUpdate(userDoc._id, {$set: {userName: userName, email: email, password: newPwd, description: description} } )
 					.then(userDoc => {
+						console.log(userDoc);
 						req.flash("success", "account info successfully updated!");
 						res.redirect('/account');
 					})
@@ -413,18 +542,16 @@ router.get('/account/services/add/:platform', (req, res, next) => {
 
 	if(platform === "spotify") {
 
-		res.redirect('https://accounts.spotify.com/authorize?client_id=2a2016384e4643778797698a67984cfe&response_type=code&redirect_uri=http://localhost:5000/auth/spotify/link&scope=user-read-email%20user-read-private%20user-follow-read%20user-top-read%20user-library-read&state=add');
-		// generate request url
-
-		// var scopes = ['user-read-email', 'user-read-private', 'user-follow-read', 'user-top-read', 'user-library-read'],
-		// state = "add";
-
-		// var authorizeURL = spotify.createAuthorizeURL(scopes, state);
-		// console.log(authorizeURL);
-
-      	
-	    
+		res.redirect(`https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_KEY}&response_type=code&redirect_uri=http://localhost:5000/auth/spotify/link&scope=user-read-email%20user-read-private%20user-follow-read%20user-top-read%20user-library-read&state=add`);
 	}
+
+	else if (platform === "deezer") {
+		res.redirect(`https://connect.deezer.com/oauth/auth.php?perms=basic_access%2Clistening_history%2Cemail%2Cmanage_library%2Coffline_access&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Fdeezer%2Flink&scope=basic_access%2Clistening_history%2Cemail%2Cmanage_library%2Coffline_access&client_id=${process.env.DEEZER_KEY_2}`)
+	}
+	else if (platform === "lastfm") {
+		res.redirect(`http://www.last.fm/api/auth?api_key=${process.env.LASTFM_KEY}&cb=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Flastfm%2Flink`)
+	}
+
 })
 
 router.get('/account/services/rm/:platform', (req, res, next) => {
