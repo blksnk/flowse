@@ -567,6 +567,9 @@ h2 {
   font-size: 20px;
   border-bottom: 1px solid black; }
 
+.matches p {
+  margin: 35px auto; }
+
 .right-bar-wrapper {
   width: 70%;
   border: 1px solid black;

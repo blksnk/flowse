@@ -30,7 +30,9 @@
     <div class="matches">
       <h5>Matches of the day</h5>
       {{#each match}}
-      <p>You matched with {{this.userId.userName}}, on the song {{this.spotify.[0].name}} by {{this.spotify.[0].artist}}</p>
+      <p>Congrats ! <br>
+        You matched with <b>{{this.userId.userName}}</b>, on the song {{this.spotify.[0].name}} by {{this.spotify.[0].artist}}</p>
+      <a href="/profile/{{this.userId._id}}">See his profile page</a>
       {{/each}}
       
     </div>
@@ -48,7 +50,7 @@
     <div class="listened-track">
       <h5>Most listened track</h5>
 
-      
+
     </div>
   </section>
 </section>

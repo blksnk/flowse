@@ -50,6 +50,7 @@ router.get("/feed", (req, res, next) => {
 				// console.log("this is my matches------------------------",songInCommon);
 				// Send the array to the HBS
 				res.locals.match = myMatches[0];
+				// res.send(matches);
 				res.render('feed.hbs');
 			})
 			.catch(err => {
@@ -58,17 +59,33 @@ router.get("/feed", (req, res, next) => {
 	})
 
 
-	User.find(userId)
-	
-	.then(results => {
-		// console.log(results);
-		spotify.setAccessToken(user.tokens.spotifyToken);
-		
-	})
-	.catch(err => next(err))
+	// User.find(userId)
+
+
+	// .then(results => {
+	// 	console.log(results);
+	// 	const spotify = req.user.tokens.spotifyToken;
+	// 	spotify.setAccessToken(spotify);
+	// 	spotify.getMyTopTracks();
+
+
+	// })
+	// .catch(err => next(err))
 
 
 });
+
+router.get("/profile/:userId", (req, res, next) => {
+	const { userId } = req.params;
+	// res.send(userId);
+	User.findById(userId)
+	.then(wantedUser => {
+		res.locals.wantedUser = wantedUser;
+		// res.send(wantedUser);
+		res.render("profile-views/profile-user.hbs");
+	})
+	.catch(err => next(err));
+})
 
 
 module.exports = router;
